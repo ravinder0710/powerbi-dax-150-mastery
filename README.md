@@ -25,7 +25,7 @@ A production-grade, highly focused interview preparation repository containing *
 ## 📁 Repository Structure
 
 ```
-powerbi-dax-450-mastery/
+powerbi-dax-150-mastery/
 ├── .git/
 ├── .gitignore
 ├── README.md                          # 150-Question Tracker & Architecture
