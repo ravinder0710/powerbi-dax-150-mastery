@@ -1,28 +1,24 @@
-# 📊 Power BI & DAX Interview Mastery — 450 Questions Challenge
-### (Data Analyst, BI Developer & Power BI Specialist | Zero to Hero)
+# 📊 Power BI & DAX Interview Mastery — Top 100 Questions Challenge
+### (Data Analyst & BI Developer | 0 to 2 Years Experience)
 
-![Power BI Challenge](https://img.shields.io/badge/Power_BI-450_DAX_Challenge-yellow.svg)
-![Target Role](https://img.shields.io/badge/Role-Data_Analyst_%7C_BI_Developer-blue.svg)
-![Status](https://img.shields.io/badge/Status-In_Progress-brightgreen.svg)
+![Power BI Challenge](https://img.shields.io/badge/Power_BI-Top_100_Interview_Questions-yellow.svg)
+![Target Role](https://img.shields.io/badge/Role-Data_Analyst_%7C_0--2_Years-blue.svg)
+![Status](https://img.shields.io/badge/Progress-10%2F100_(10%25)-brightgreen.svg)
 
-A production-grade, battle-tested repository containing **450 curated Power BI & DAX interview questions** designed strictly for clearing technical rounds. Covering everything from scalar aggregations and row-by-row iterators to complex filter context transitions, semi-additive measures, time intelligence, dynamic RLS, and VertiPaq engine tuning.
+A production-grade, highly focused interview preparation repository containing **100 high-yield Power BI & DAX questions** specifically curated for **Freshers and 0–2 Years Experience Data Analysts**.
 
 ---
 
-## 🗂️ Curriculum & Progress Tracker (10 / 450)
+## 🗂️ Curriculum & Progress Tracker (10 / 100)
 
-| Tier | Category | Questions Target | Completed | Progress Status |
+| Pillar | Topic / Area | Target Questions | Completed | Status |
 |:---|:---|:---:|:---:|:---|
-| **1. Basic** | 01. Basic Easy (Aggregations, Math, Scalar Measures) | 50 | 10 | `[██░░░░░░░░] 20%` |
-| | 02. Basic Medium (Logical, DIVIDE, Basic CALCULATE) | 50 | 0 | `[░░░░░░░░░░] 0%` |
-| | 03. Basic Hard (Iterators: SUMX, AVERAGEX, RELATED) | 50 | 0 | `[░░░░░░░░░░] 0%` |
-| **2. Intermediate** | 01. Intermediate Easy (ALL, ALLEXCEPT, ALLSELECTED, Slicers) | 50 | 0 | `[░░░░░░░░░░] 0%` |
-| | 02. Intermediate Medium (YoY, MoM, Time Intelligence, USERELATIONSHIP) | 50 | 0 | `[░░░░░░░░░░] 0%` |
-| | 03. Intermediate Hard (RANKX, TOPN, Disconnected Tables, Semi-additive) | 50 | 0 | `[░░░░░░░░░░] 0%` |
-| **3. Advance** | 01. Advance Easy (Context Transition, KEEPFILTERS, TREATAS) | 50 | 0 | `[░░░░░░░░░░] 0%` |
-| | 02. Advance Medium (Cohort, Churn, Dynamic RLS, WINDOW/OFFSET) | 50 | 0 | `[░░░░░░░░░░] 0%` |
-| | 03. Advance Hard (Many-to-Many DAX, Hierarchies, Engine Tuning) | 50 | 0 | `[░░░░░░░░░░] 0%` |
-| **TOTAL** | **9 Categories** | **450** | **0** | **0 / 450** |
+| **Pillar 1** | **Core DAX Aggregations & Iterators** (`SUM`, `SUMX`, `DIVIDE`, `COUNTROWS`, Math) | 20 | 10 | `[█████░░░░░] 50%` |
+| **Pillar 2** | **Logical & Conditional DAX** (`IF`, `SWITCH(TRUE())`, `BLANK`, `ISBLANK`) | 15 | 0 | `[░░░░░░░░░░] 0%` |
+| **Pillar 3** | **Filter Context King** (`CALCULATE`, `ALL`, `ALLEXCEPT`, `ALLSELECTED`, %) | 25 | 0 | `[░░░░░░░░░░] 0%` |
+| **Pillar 4** | **Time Intelligence Masterclass** (YTD, MTD, `SAMEPERIODLASTYEAR`, YoY Growth %) | 20 | 0 | `[░░░░░░░░░░] 0%` |
+| **Pillar 5** | **Data Modeling, Relationships & Service** (Star Schema, Inactive Joins, RLS) | 20 | 0 | `[░░░░░░░░░░] 0%` |
+| **TOTAL** | **5 Core Pillars** | **100** | **10** | **10 / 100 (10%)** |
 
 ---
 
@@ -30,40 +26,23 @@ A production-grade, battle-tested repository containing **450 curated Power BI &
 
 ```
 powerbi-dax-450-mastery/
-├── 01_Basic/
-│   ├── 01_Basic_Easy/        # (Q001 - Q050) Scalar Aggregations, Math, Measures vs Calc Columns
-│   ├── 02_Basic_Medium/      # (Q051 - Q100) IF, SWITCH, DIVIDE, BLANK, Basic CALCULATE
-│   └── 03_Basic_Hard/        # (Q101 - Q150) Iterators (SUMX, AVERAGEX), RELATED, RELATEDTABLE
-├── 02_Intermediate/
-│   ├── 01_Inter_Easy/        # (Q151 - Q200) ALL, ALLEXCEPT, ALLSELECTED, % of Total
-│   ├── 02_Inter_Medium/      # (Q201 - Q250) YoY, MoM, DATESYTD, SAMEPERIODLASTYEAR, USERELATIONSHIP
-│   └── 03_Inter_Hard/        # (Q251 - Q300) RANKX, TOPN, Dynamic Metric Switchers, Semi-additive
-└── 03_Advance/
-    ├── 01_Adv_Easy/          # (Q301 - Q350) Context Transition, KEEPFILTERS, Expanded Tables, TREATAS
-    ├── 02_Adv_Medium/        # (Q351 - Q400) Customer Churn, New vs Repeat, Dynamic RLS, Window DAX
-    └── 03_Adv_Hard/          # (Q401 - Q450) Many-to-Many Bridge vs DAX, Parent-Child, DAX Studio Tuning
+├── .git/
+├── .gitignore
+├── README.md                          # 100-Question Tracker & Architecture
+├── INTERVIEW_QUICK_REVISION_NOTES.md  # 1-Liner Interview Punchlines & Traps
+├── 01_Pillar1_Core_DAX_Math/          # (Q001 - Q020)
+├── 02_Pillar2_Logical_Conditional/    # (Q021 - Q035)
+├── 03_Pillar3_Filter_Context/         # (Q036 - Q060)
+├── 04_Pillar4_Time_Intelligence/      # (Q061 - Q080)
+└── 05_Pillar5_Modeling_Service/       # (Q081 - Q100)
 ```
 
 ---
 
-## 🏢 Standard Star Schema Definition
+## 🏢 Standard Star Schema
 
-All questions in this repository are based on an enterprise standard Retail / E-commerce star schema:
-
-* **`DimProduct`** (`ProductID`, `ProductName`, `Category`, `SubCategory`, `StandardCost`, `ListPrice`)
-* **`DimCustomer`** (`CustomerID`, `CustomerName`, `Gender`, `Country`, `City`, `CustomerType`)
-* **`DimDate`** (`Date`, `DateKey`, `Year`, `MonthNum`, `MonthName`, `Quarter`, `DayOfWeek`)
-* **`DimStore`** (`StoreID`, `StoreName`, `Region`, `Country`)
-* **`FactSales`** (`OrderNumber`, `OrderDateKey`, `ShipDateKey`, `ProductID`, `CustomerID`, `StoreID`, `Quantity`, `UnitPrice`, `DiscountAmount`, `TotalCost`)
-* **`FactBudget`** (`DateKey`, `Category`, `BudgetAmount`)
-
----
-
-## 🛠️ File Format Standard
-
-Every question file is documented with:
-1. **Business Problem & Scenario Recap**
-2. **Mock Data Sample (5–7 rows)**
-3. **Visual / Display Matrix Expectation**
-4. **Optimized DAX Measure Solution**
-5. **Interviewer Defense & Common Traps** (Why this function? Filter context impact? Engine cost?)
+- **`DimProduct`**: `ProductID`, `ProductName`, `Category`, `SubCategory`, `StandardCost`, `ListPrice`
+- **`DimCustomer`**: `CustomerID`, `CustomerName`, `Gender`, `Country`, `City`, `CustomerType`
+- **`DimDate`**: `Date`, `DateKey`, `Year`, `MonthNum`, `MonthName`, `Quarter`, `DayOfWeek`
+- **`DimStore`**: `StoreID`, `StoreName`, `Region`, `Country`
+- **`FactSales`**: `OrderNumber`, `OrderDateKey`, `ShipDateKey`, `ProductID`, `CustomerID`, `StoreID`, `Quantity`, `UnitPrice`, `DiscountAmount`, `TotalCost`
