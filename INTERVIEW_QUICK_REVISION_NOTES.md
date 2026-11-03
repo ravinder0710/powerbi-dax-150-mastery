@@ -54,3 +54,14 @@
 * **Why does `AVERAGE()` fail here?**
   1. `AVERAGE()` requires a physical column reference; passing a dynamic measure `AVERAGE([Total Sales])` is a syntax error.
   2. In transactional fact tables with multiple line items per order, averaging rows yields **Line-Item Average**, not **Order Average**.
+
+---
+
+## 📌 Q006: Filter Modification (`CALCULATE`)
+* **Core Formula:**
+  ```dax
+  Electronics Sales = CALCULATE([Total Sales], DimProduct[Category] = "Electronics")
+  ```
+* **The Syntax Trap:** Never wrap a measure inside `SUM()` (e.g. `SUM([Total Sales])` is illegal). Reference measures directly.
+* **Why `CALCULATE` is the Super-Power Function?** It is the **only** function in DAX that can modify the Filter Context (add, overwrite, or remove filters) and trigger Context Transition.
+* **Relationship Propagation:** Filters placed on a Dimension table (`DimProduct`) automatically filter the Fact table (`FactSales`) via active 1-to-many relationships.
