@@ -79,4 +79,16 @@
   - **Comma `,` is Best Practice:** Each filter evaluates as an independent argument. The VertiPaq Storage Engine (SE) processes them in parallel using bitmap indexes and computes their intersection.
   - **`&&` across tables:** Can trigger the Formula Engine (FE) to materialize cross-table combinations, which is slower on large enterprise datasets.
 
+---
+
+## 📌 Q008: Logical OR & The IN Operator (`IN` vs `||`)
+* **Core Formula:**
+  ```dax
+  Electronics & Home Decor Sales = CALCULATE([Total Sales], DimProduct[Category] IN { "Electronics", "Home Decor" })
+  ```
+* **The SQL vs DAX Trap:** SQL uses parentheses `IN ('A', 'B')`, but **DAX strictly requires curly braces `{ "A", "B" }`**.
+* **Why Curly Braces?** In DAX, `{}` is the Table Constructor that materializes a single-column in-memory table.
+* **Why `IN` over `||`?** Scalable, readable, and VertiPaq executes it via an optimized Hash Match/Bitmask instead of multiple boolean branch evaluations.
+
+
 
