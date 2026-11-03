@@ -1,4 +1,4 @@
-# Q002: Total Cost and Profit using Measure Branching
+# Q002: Total Cost and Total Profit via Measure Branching
 
 ## 📌 Metadata
 - **Module:** Module 1: Aggregations & Iterators
@@ -9,13 +9,13 @@
 ---
 
 ## 🏢 Business Scenario
-Following the creation of `[Total Sales]`, the finance department requires visibility into the company's cost of goods sold (COGS) and net profitability per order.
-- Each order line has a `Quantity` and a `UnitCost`. Total cost must account for all units sold.
-- Profit must be computed by leveraging existing measures (**Measure Branching**) rather than writing monolithic formulas.
+Following the creation of `[Total Sales]` (Q001), finance leadership needs visibility into `Total Cost` and `Total Profit`. 
+
+Instead of writing redundant and complex standalone calculations, the organization mandates the use of **Measure Branching** (building higher-level business metrics on top of modular base measures) to maintain code scalability and performance.
 
 Formulas:
-$$\text{Total Cost} = \text{Quantity} \times \text{UnitCost}$$
-$$\text{Total Profit} = \text{Total Sales} - \text{Total Cost}$$
+- $$\text{Total Cost} = \sum (\text{Quantity} \times \text{UnitCost})$$
+- $$\text{Total Profit} = \text{Total Sales} - \text{Total Cost}$$
 
 ---
 
@@ -29,8 +29,6 @@ $$\text{Total Profit} = \text{Total Sales} - \text{Total Cost}$$
 | ORD-104 | P-13 | 3 | 150 | 0 | 90 |
 | ORD-105 | P-14 | 5 | 80 | 20 | 50 |
 | ORD-106 | P-12 | 2 | 1200 | 150 | 800 |
-
-*(Pre-requisite Measure available: `[Total Sales]`)*
 
 ---
 
@@ -50,29 +48,28 @@ $$\text{Total Profit} = \text{Total Sales} - \text{Total Cost}$$
 
 ## 💡 Production DAX Solution
 
+### Step 1: Base Measure for Total Cost
 ```dax
--- Measure 1: Total Cost
 Total Cost = 
 SUMX(
     FactSales,
     FactSales[Quantity] * FactSales[UnitCost]
 )
+```
 
--- Measure 2: Total Profit (Leveraging Measure Branching)
-Total Profit = 
-[Total Sales] - [Total Cost]
+### Step 2: Branched Measure for Total Profit
+```dax
+Total Profit = [Total Sales] - [Total Cost]
 ```
 
 ---
 
 ## 🧠 Interview Defense & Technical Takeaways
 
-1. **Why not `SUM(FactSales[UnitCost])`?**
-   - Simple `SUM` aggregates the `UnitCost` column directly without factoring in `Quantity`. When an order contains multiple units (e.g., 2 units at $300 each), `SUM` yields $300 instead of the true total cost of $600. `SUMX` iterates over each row to multiply `Quantity * UnitCost` before summing.
+1. **Common Syntax Pitfall:**
+   - Both columns (`Quantity` and `UnitCost`) must reside strictly inside the second parameter of `SUMX`. Placing the closing parenthesis right after `UnitCost` terminates the row context and throws a context error when referencing `Quantity`.
 
-2. **What is Measure Branching?**
-   - Measure Branching refers to the practice of chaining smaller, modular measures together (e.g., combining `[Total Sales]` and `[Total Cost]` into `[Total Profit]`).
-
-3. **Advantages of Measure Branching in Enterprise BI:**
-   - **Maintainability & DRY:** If discount or tax logic changes inside `[Total Sales]`, all downstream calculations (`Profit`, `Margin %`) update automatically without code changes.
-   - **Engine Optimization:** Power BI's Formula Engine can reuse cached query sub-plans for base measures during visual rendering.
+2. **Why Measure Branching Matters:**
+   - **Maintainability:** Modifying upstream business logic (e.g. adjusting tax in `[Total Sales]`) automatically cascades down to `[Total Profit]` without manual refactoring across dozens of formulas.
+   - **DAX Formula Engine Caching:** VertiPaq can cache intermediate calculation results of base measures within the same visual execution step, avoiding re-scanning the physical fact table.
+   - **Troubleshooting:** Isolating bugs in reporting becomes straightforward because individual components (`Sales`, `Cost`) can be tested independently.
