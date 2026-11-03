@@ -90,5 +90,20 @@
 * **Why Curly Braces?** In DAX, `{}` is the Table Constructor that materializes a single-column in-memory table.
 * **Why `IN` over `||`?** Scalable, readable, and VertiPaq executes it via an optimized Hash Match/Bitmask instead of multiple boolean branch evaluations.
 
+---
+
+## 📌 Q009: Removing Filters using ALL (`ALL(Column)` vs `ALL(Table)`)
+* **Core Formula:**
+  ```dax
+  All Products Sales = CALCULATE([Total Sales], ALL(DimProduct[Category]))
+  -- OR for absolute table total:
+  All Products Sales = CALCULATE([Total Sales], ALL(DimProduct))
+  ```
+* **Syntax Trap:** Ensure `ALL()` is passed *inside* `CALCULATE([Total Sales], ALL(...))` and not outside the closing bracket.
+* **`ALL(Column)` vs `ALL(Table)`:**
+  - `ALL(Column)` clears filters from only that specific column (other columns like `SubCategory` still filter).
+  - `ALL(Table)` clears filters from all columns across the entire dimension table.
+
+
 
 
