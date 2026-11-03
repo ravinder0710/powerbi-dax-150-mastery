@@ -68,3 +68,15 @@
   2. It performs **Context Transition** (transforms Row Context into Filter Context).
   3. Under the hood, boolean filters like `Category = "Electronics"` are translated into: `FILTER(ALL(DimProduct[Category]), DimProduct[Category] = "Electronics")`.
 
+---
+
+## 📌 Q007: Multiple Filters in CALCULATE (Comma `,` vs `&&`)
+* **Core Formula:**
+  ```dax
+  North Electronics Sales = CALCULATE([Total Sales], DimProduct[Category] = "Electronics", DimStore[Region] = "North")
+  ```
+* **Comma `,` vs `&&` Difference:**
+  - **Comma `,` is Best Practice:** Each filter evaluates as an independent argument. The VertiPaq Storage Engine (SE) processes them in parallel using bitmap indexes and computes their intersection.
+  - **`&&` across tables:** Can trigger the Formula Engine (FE) to materialize cross-table combinations, which is slower on large enterprise datasets.
+
+
