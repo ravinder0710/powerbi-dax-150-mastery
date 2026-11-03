@@ -62,6 +62,9 @@
   ```dax
   Electronics Sales = CALCULATE([Total Sales], DimProduct[Category] = "Electronics")
   ```
-* **The Syntax Trap:** Never wrap a measure inside `SUM()` (e.g. `SUM([Total Sales])` is illegal). Reference measures directly.
-* **Why `CALCULATE` is the Super-Power Function?** It is the **only** function in DAX that can modify the Filter Context (add, overwrite, or remove filters) and trigger Context Transition.
-* **Relationship Propagation:** Filters placed on a Dimension table (`DimProduct`) automatically filter the Fact table (`FactSales`) via active 1-to-many relationships.
+* **The Syntax Trap:** Never wrap an existing measure in an aggregate function like `SUM([Total Sales])`. Measures are referenced directly by `[MeasureName]`.
+* **Why is `CALCULATE()` the Super-Power Function?**
+  1. It is the **only** function that can modify, override, or clear the active Filter Context.
+  2. It performs **Context Transition** (transforms Row Context into Filter Context).
+  3. Under the hood, boolean filters like `Category = "Electronics"` are translated into: `FILTER(ALL(DimProduct[Category]), DimProduct[Category] = "Electronics")`.
+
