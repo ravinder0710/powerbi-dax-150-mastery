@@ -9,11 +9,11 @@ A production-grade, battle-tested repository containing **450 curated Power BI &
 
 ---
 
-## 🗂️ Curriculum & Progress Tracker (9 / 450)
+## 🗂️ Curriculum & Progress Tracker (10 / 450)
 
 | Tier | Category | Questions Target | Completed | Progress Status |
 |:---|:---|:---:|:---:|:---|
-| **1. Basic** | 01. Basic Easy (Aggregations, Math, Scalar Measures) | 50 | 9 | `[█░░░░░░░░░] 18%` |
+| **1. Basic** | 01. Basic Easy (Aggregations, Math, Scalar Measures) | 50 | 10 | `[██░░░░░░░░] 20%` |
 | | 02. Basic Medium (Logical, DIVIDE, Basic CALCULATE) | 50 | 0 | `[░░░░░░░░░░] 0%` |
 | | 03. Basic Hard (Iterators: SUMX, AVERAGEX, RELATED) | 50 | 0 | `[░░░░░░░░░░] 0%` |
 | **2. Intermediate** | 01. Intermediate Easy (ALL, ALLEXCEPT, ALLSELECTED, Slicers) | 50 | 0 | `[░░░░░░░░░░] 0%` |

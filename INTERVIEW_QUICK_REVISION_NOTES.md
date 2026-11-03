@@ -104,6 +104,19 @@
   - `ALL(Column)` clears filters from only that specific column (other columns like `SubCategory` still filter).
   - `ALL(Table)` clears filters from all columns across the entire dimension table.
 
+---
+
+## 📌 Q010: Contribution % of Total Sales (`% of Total`)
+* **Core Formula (Standalone):**
+  ```dax
+  % of Total Sales = DIVIDE([Total Sales], CALCULATE([Total Sales], ALL(DimProduct)), 0)
+  ```
+* **How It Works (Filter Context):**
+  - **Numerator:** Evaluates under current row's Filter Context (e.g. `Category = "Electronics"`).
+  - **Denominator:** `CALCULATE + ALL()` strips the filter to calculate the grand total.
+* **Why `DIVIDE`?** Protects against null/zero division errors and allows automatic suppression of blank rows.
+
+
 
 
 
