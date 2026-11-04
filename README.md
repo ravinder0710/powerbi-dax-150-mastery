@@ -32,6 +32,23 @@ A production-grade, highly focused interview preparation repository containing *
 
 ---
 
+## 📖 Solved Questions Index
+
+| # | Question Title | Topic / Concept | Company Tags | Solution Link |
+|:---:|:---|:---|:---|:---:|
+| **Q001** | Total Net Sales Revenue | Row-by-Row Iterator (`SUMX`) vs Simple `SUM` | TCS, Infosys, Accenture | [Q001 Solution ↗](01_Pillar1_Core_DAX_Math/Q001_Total_Net_Sales_SUMX.md) |
+| **Q002** | COGS & Gross Profit | Measure Branching & Reusability (DRY Principle) | Deloitte, EY, KPMG | [Q002 Solution ↗](01_Pillar1_Core_DAX_Math/Q002_Total_Cost_and_Profit_Measure_Branching.md) |
+| **Q003** | Safe Margin Calculation | Division by Zero Protection (`DIVIDE` vs `/`) | Amazon, Flipkart, Walmart | [Q003 Solution ↗](01_Pillar1_Core_DAX_Math/Q003_Profit_Margin_DIVIDE.md) |
+| **Q004** | Distinct Order Count | Order Grain vs Row Count (`DISTINCTCOUNT` vs `COUNTROWS`) | Swiggy, Zomato, Zepto | [Q004 Solution ↗](01_Pillar1_Core_DAX_Math/Q004_Distinct_Order_Count.md) |
+| **Q005** | Average Order Value (AOV) & UPT | Multi-Item Basket Ratios & `AVERAGE` Grain Trap | Target, Reliance Retail, Croma | [Q005 Solution ↗](01_Pillar1_Core_DAX_Math/Q005_AOV_and_UPT_Ratios.md) |
+| **Q006** | Freeze Category KPI | Filter Context Modification via `CALCULATE()` | Fractal Analytics, Tiger Analytics | [Q006 Solution ↗](01_Pillar1_Core_DAX_Math/Q006_Calculate_Basic_Filter.md) |
+| **Q007** | Cross-Dimensional Sales | Multi-Table AND Filtering (Comma `,` vs `&&`) | Capgemini, Cognizant, Wipro | [Q007 Solution ↗](01_Pillar1_Core_DAX_Math/Q007_Calculate_Multiple_Filters_AND.md) |
+| **Q008** | Lifestyle Bundled Revenue | Set Membership & Table Constructor (`IN` with `{}`) | Myntra, Nykaa, Meesho | [Q008 Solution ↗](01_Pillar1_Core_DAX_Math/Q008_Calculate_Logical_OR_IN.md) |
+| **Q009** | Universal Enterprise Benchmark | Removing Filters using `ALL(Table)` vs `ALL(Column)` | Microsoft, Google, Uber | [Q009 Solution ↗](01_Pillar1_Core_DAX_Math/Q009_Calculate_ALL_Clear_Filters.md) |
+| **Q010** | Category Contribution Ratio | Pareto Analysis & Percentage of Total (`% of Total`) | McKinsey, BCG, Bain Analytics | [Q010 Solution ↗](01_Pillar1_Core_DAX_Math/Q010_Percentage_of_Total_Sales.md) |
+
+---
+
 ## 📁 Repository Structure
 
 ```
