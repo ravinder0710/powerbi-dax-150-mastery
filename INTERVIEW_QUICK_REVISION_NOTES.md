@@ -27,3 +27,26 @@
   1. **DRY Principle (Don't Repeat Yourself):** Kal ko agar sales ya cost ka logic badla, to sirf base measure badalna padega; profit apne aap update ho jayega.
   2. **Formula Engine Cache:** Power BI intermediate measures ke results ko cache kar leta hai jisse visuals fast load hote hain.
   3. **Clean Code:** 15 line ka monster code likhne se bachate hain.
+
+---
+
+## 📌 Q003: Safe Division (`DIVIDE` vs `/`)
+* **Formula:**
+  ```dax
+  Profit Margin % = DIVIDE([Total Profit], [Total Net Sales], 0)
+  ```
+* **Business Problem:** Percentage margin dekhna zaroori hai taaki alag-alag ticket size ke products ki profitability compare ki ja sake.
+* **DIVIDE kyu lagaya?** Standard `/` operator division-by-zero par `Infinity` ya `NaN` error deta hai aur visual toot jata hai. `DIVIDE()` safe-division karta hai.
+* **3rd parameter na de to?** Default `BLANK()` return hota hai.
+* **Advance Trap:** `BLANK()` chhodne se visual empty rows ko auto-suppress (hide) kar deta hai, jisse report fast chalti hai. `0` dene par Power BI zero wali sari rows render karta hai.
+
+---
+
+## 📌 Q004: Distinct Counting (`DISTINCTCOUNT` vs `COUNTROWS` vs `COUNT`)
+* **Formula:**
+  ```dax
+  Total Orders Placed = DISTINCTCOUNT(FactSales[OrderID])
+  ```
+* **Business Problem:** E-commerce me ek order me multiple items hone par duplicate rows hoti hain. `COUNTROWS` lene se order count galat (inflated) ho jayega.
+* **Blank Trap:** `DISTINCTCOUNT` blank value ko bhi count (+1) kar leta hai. Blank ignore karne ke liye **`DISTINCTCOUNTNOBLANK(Column)`** use karte hain.
+* **COUNTROWS vs COUNT:** `COUNTROWS(Table)` hamesha fast hota hai kyunki ye VertiPaq metadata se direct total rows utha leta hai bina data page scan kiye.
