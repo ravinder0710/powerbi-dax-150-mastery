@@ -47,3 +47,14 @@ powerbi-dax-150-mastery/
 - **`DimDate`**: `Date`, `DateKey`, `Year`, `MonthNum`, `MonthName`, `Quarter`, `DayOfWeek`
 - **`DimStore`**: `StoreID`, `StoreName`, `Region`, `Country`
 - **`FactSales`**: `OrderNumber`, `OrderDateKey`, `ShipDateKey`, `ProductID`, `CustomerID`, `StoreID`, `Quantity`, `UnitPrice`, `DiscountAmount`, `TotalCost`
+
+---
+
+## 💼 Power BI Licensing Guide (Interview Essentials)
+
+| License Tier | Cost | Industry Role & Developer Use Case |
+|:---|:---|:---|
+| **Power BI Desktop** | **100% Free** | Complete local report authoring, Data Modeling, DAX formulas, Power Query ETL, and dashboard visualization. **Zero cost for learning and development.** |
+| **Power BI Pro** | ~$10 / user / mo | Cloud deployment to Power BI Service, workspace collaboration, team report sharing, Row-Level Security (RLS) distribution, and Scheduled Refresh (up to 8x/day). |
+| **Power BI Premium / Fabric** | Capacity-based | Large-scale enterprise distribution (viewers do not need individual Pro licenses), AI integration, paginated reports, massive datasets (>1 GB), and 48x/day refresh. |
+
