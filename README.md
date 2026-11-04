@@ -9,11 +9,11 @@ A production-grade, highly focused interview preparation repository containing *
 
 ---
 
-## 🗂️ Curriculum & Progress Tracker (1 / 150)
+## 🗂️ Curriculum & Progress Tracker (2 / 150)
 
 | Pillar | Topic / Area | Target Questions | Completed | Status |
 |:---|:---|:---:|:---:|:---|
-| **Pillar 1** | **Core DAX Aggregations & Math** (Qs 001 – 030) | 30 | 1 | `[█░░░░░░░░░] 3%` |
+| **Pillar 1** | **Core DAX Aggregations & Math** (Qs 001 – 030) | 30 | 2 | `[█░░░░░░░░░] 7%` |
 | **Pillar 2** | **Logical, Text & Conditional DAX** (Qs 031 – 060) | 30 | 0 | `[░░░░░░░░░░] 0%` |
 | **Pillar 3** | **Filter Context King (`CALCULATE` & Modifiers)** (Qs 061 – 090) | 30 | 0 | `[░░░░░░░░░░] 0%` |
 | **Pillar 4** | **Time Intelligence Masterclass** (Qs 091 – 120) | 30 | 0 | `[░░░░░░░░░░] 0%` |

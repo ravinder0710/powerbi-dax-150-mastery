@@ -1,122 +1,29 @@
-# 🎯 DAX Interview Quick Revision Notes (Zero to Hero)
-> **Purpose:** Crisp, one-liner answers, interview defense traps, and formula references to review before any technical interview.
+# 🎯 DAX Interview Quick Revision Notes (Top 150 Mastery)
+> **Purpose:** Interview se 15 minute pehle revise karne ke liye crisp Hinglish notes, interviewer punchlines, aur traps.
 
 ---
 
-## 📌 Q001: Row-by-Row Iterator (`SUMX`) vs Aggregation (`SUM`)
-* **Core Formula:**
+## 📌 Q001: Row-by-Row Iterator (`SUMX`) vs Simple Aggregation (`SUM`)
+* **Formula:**
   ```dax
-  Total Sales = SUMX(FactSales, (FactSales[Quantity] * FactSales[UnitPrice]) - FactSales[DiscountAmount])
+  Total Net Sales = SUMX(FactSales, (FactSales[Quantity] * FactSales[UnitPrice]) - FactSales[DiscountAmount])
   ```
-* **Why not `SUM`?** `SUM` only accepts a single column (`SUM(Table[Column])`). To compute an arithmetic expression across multiple columns row-by-row, an iterator (`SUMX`) is mandatory.
-* **Why not a Calculated Column?** Calculated columns consume permanent RAM & storage in the VertiPaq engine. Measures compute dynamically on-the-fly and save memory.
-* **Naming Standard Rule:** Columns MUST have table prefix (`FactSales[Quantity]`), measures MUST be standalone (`[Total Sales]`).
+* **Business Problem:** Client data warehouse me `SalesAmount` ka column store nahi karta taaki storage bache. Hume on-the-fly net revenue nikalna hai.
+* **SUM kyu fail hota hai?** `SUM()` sirf ek single column leta hai (e.g. `SUM(Table[Col])`). Ye do ya teen columns ke beech calculation (`Qty * Price - Discount`) evaluate nahi kar sakta.
+* **SUMX kyu lagaya?** `SUMX` ek iterator hai jo table par **Row Context** banata hai, row-by-row calculation karta hai, aur end me Filter Context ke according SUM deta hai.
+* **Calculated Column kyu nahi banaya?** Calculated column RAM aur disk space permanently gher leta hai. Measure dynamically compute hota hai aur model ko fast aur light rakhta hai.
+* **Syntax Rule:** Column ke aage table ka naam hamesha aayega (`FactSales[Quantity]`), measure hamesha akela aayega (`[Total Net Sales]`).
 
 ---
 
-## 📌 Q002: Measure Branching (Reusing Base Measures)
-* **Core Formulas:**
+## 📌 Q002: Measure Branching (`Total Cost` & `Total Profit`)
+* **Formulas:**
   ```dax
   Total Cost = SUMX(FactSales, FactSales[Quantity] * FactSales[UnitCost])
-  Total Profit = [Total Sales] - [Total Cost]
+  Total Profit = [Total Net Sales] - [Total Cost]
   ```
-* **Why Measure Branching?** 
-  1. **DRY Principle (Don't Repeat Yourself):** Changing discount logic in `[Total Sales]` automatically cascades updates to Profit and Margin without touching other measures.
-  2. **Engine Cache:** Power BI Formula Engine caches intermediate measure results across visual elements.
-
----
-
-## 📌 Q003: Safe Division (`DIVIDE` vs `/`)
-* **Core Formula:**
-  ```dax
-  Profit Margin % = DIVIDE([Total Profit], [Total Sales], 0)
-  ```
-* **Why `DIVIDE` over `/`?** `/` crashes or returns `Infinity` / `NaN` when the denominator is 0. `DIVIDE` handles division by zero internally.
-* **What if 3rd parameter is omitted?** Returns `BLANK()`. This is often preferred because Power BI tables automatically suppress blank rows, optimizing visual performance.
-
----
-
-## 📌 Q004: Distinct Counting (`DISTINCTCOUNT` vs `DISTINCTCOUNTNOBLANK` vs `COUNTROWS`)
-* **Core Formula:**
-  ```dax
-  Total Orders Placed = DISTINCTCOUNT(FactSales[OrderID])
-  ```
-* **The Blank Trap:** `DISTINCTCOUNT()` counts `BLANK()` as a valid unique category (adds +1). To exclude blanks, use `DISTINCTCOUNTNOBLANK()`.
-* **Counting Table Rows:** Always use `COUNTROWS(Table)` instead of `COUNT(Column)`. `COUNTROWS` reads metadata directly from VertiPaq without scanning column pages, making it much faster.
-
----
-
-## 📌 Q005: Average Order Value (AOV) & Ratio Metrics
-* **Core Formula:**
-  ```dax
-  Average Order Value = DIVIDE([Total Sales], [Total Orders Placed], 0)
-  ```
-* **Why does `AVERAGE()` fail here?**
-  1. `AVERAGE()` requires a physical column reference; passing a dynamic measure `AVERAGE([Total Sales])` is a syntax error.
-  2. In transactional fact tables with multiple line items per order, averaging rows yields **Line-Item Average**, not **Order Average**.
-
----
-
-## 📌 Q006: Filter Modification (`CALCULATE`)
-* **Core Formula:**
-  ```dax
-  Electronics Sales = CALCULATE([Total Sales], DimProduct[Category] = "Electronics")
-  ```
-* **The Syntax Trap:** Never wrap an existing measure in an aggregate function like `SUM([Total Sales])`. Measures are referenced directly by `[MeasureName]`.
-* **Why is `CALCULATE()` the Super-Power Function?**
-  1. It is the **only** function that can modify, override, or clear the active Filter Context.
-  2. It performs **Context Transition** (transforms Row Context into Filter Context).
-  3. Under the hood, boolean filters like `Category = "Electronics"` are translated into: `FILTER(ALL(DimProduct[Category]), DimProduct[Category] = "Electronics")`.
-
----
-
-## 📌 Q007: Multiple Filters in CALCULATE (Comma `,` vs `&&`)
-* **Core Formula:**
-  ```dax
-  North Electronics Sales = CALCULATE([Total Sales], DimProduct[Category] = "Electronics", DimStore[Region] = "North")
-  ```
-* **Comma `,` vs `&&` Difference:**
-  - **Comma `,` is Best Practice:** Each filter evaluates as an independent argument. The VertiPaq Storage Engine (SE) processes them in parallel using bitmap indexes and computes their intersection.
-  - **`&&` across tables:** Can trigger the Formula Engine (FE) to materialize cross-table combinations, which is slower on large enterprise datasets.
-
----
-
-## 📌 Q008: Logical OR & The IN Operator (`IN` vs `||`)
-* **Core Formula:**
-  ```dax
-  Electronics & Home Decor Sales = CALCULATE([Total Sales], DimProduct[Category] IN { "Electronics", "Home Decor" })
-  ```
-* **The SQL vs DAX Trap:** SQL uses parentheses `IN ('A', 'B')`, but **DAX strictly requires curly braces `{ "A", "B" }`**.
-* **Why Curly Braces?** In DAX, `{}` is the Table Constructor that materializes a single-column in-memory table.
-* **Why `IN` over `||`?** Scalable, readable, and VertiPaq executes it via an optimized Hash Match/Bitmask instead of multiple boolean branch evaluations.
-
----
-
-## 📌 Q009: Removing Filters using ALL (`ALL(Column)` vs `ALL(Table)`)
-* **Core Formula:**
-  ```dax
-  All Products Sales = CALCULATE([Total Sales], ALL(DimProduct[Category]))
-  -- OR for absolute table total:
-  All Products Sales = CALCULATE([Total Sales], ALL(DimProduct))
-  ```
-* **Syntax Trap:** Ensure `ALL()` is passed *inside* `CALCULATE([Total Sales], ALL(...))` and not outside the closing bracket.
-* **`ALL(Column)` vs `ALL(Table)`:**
-  - `ALL(Column)` clears filters from only that specific column (other columns like `SubCategory` still filter).
-  - `ALL(Table)` clears filters from all columns across the entire dimension table.
-
----
-
-## 📌 Q010: Contribution % of Total Sales (`% of Total`)
-* **Core Formula (Standalone):**
-  ```dax
-  % of Total Sales = DIVIDE([Total Sales], CALCULATE([Total Sales], ALL(DimProduct)), 0)
-  ```
-* **How It Works (Filter Context):**
-  - **Numerator:** Evaluates under current row's Filter Context (e.g. `Category = "Electronics"`).
-  - **Denominator:** `CALCULATE + ALL()` strips the filter to calculate the grand total.
-* **Why `DIVIDE`?** Protects against null/zero division errors and allows automatic suppression of blank rows.
-
-
-
-
-
+* **Business Problem:** Company ko apna COGS (Cost of Goods Sold) aur actual Gross Profit track karna hai.
+* **Measure Branching ka fayda?** 
+  1. **DRY Principle (Don't Repeat Yourself):** Kal ko agar sales ya cost ka logic badla, to sirf base measure badalna padega; profit apne aap update ho jayega.
+  2. **Formula Engine Cache:** Power BI intermediate measures ke results ko cache kar leta hai jisse visuals fast load hote hain.
+  3. **Clean Code:** 15 line ka monster code likhne se bachate hain.
