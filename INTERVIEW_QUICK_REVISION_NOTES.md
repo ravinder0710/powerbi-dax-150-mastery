@@ -64,3 +64,60 @@
 * **Direct AVERAGE() kyu fail hota hai?**
   1. **Syntax Rule:** DAX me `AVERAGE([Measure])` syntax error deta hai. Wo sirf physical column leta hai.
   2. **Grain Mismatch:** Fact table ki rows ko average karne se **Line-Item Average** nikalta hai, **Order-level Average** nahi! Kyunki 1 order me multiple items hote hain. Sahi formula hamesha `Total Sales / Total Orders` hota hai.
+
+
+---
+
+## 📌 Q006: Filter Modification (`CALCULATE`)
+* **Formula:**
+  ```dax
+  Electronics Net Sales = CALCULATE([Total Net Sales], DimProduct[Category] = "Electronics")
+  ```
+* **Business Problem:** Hardcoded category KPIs freeze karna overview dashboard ke liye.
+* **CALCULATE kyu Super-Power hai?**
+  1. Pooray DAX me **akela function** hai jo Filter Context ko modify/add/overwrite/delete kar sakta hai.
+  2. Ye **Context Transition** perform karta hai (Row Context ko Filter Context me badal deta hai).
+  3. Internal Engine execution: Boolean condition `Category = "Electronics"` background me `FILTER(ALL(DimProduct[Category]), DimProduct[Category] = "Electronics")` me convert hoti hai.
+
+---
+
+## 📌 Q007: Multiple Filters in CALCULATE (Comma `,` vs `&&`)
+* **Formula:**
+  ```dax
+  North Electronics Sales = CALCULATE([Total Net Sales], DimProduct[Category] = "Electronics", DimStore[Region] = "North")
+  ```
+* **Comma `,` vs `&&` Difference:**
+  - **Comma `,` Best Practice hai:** VertiPaq Storage Engine (SE) dono filters ko parallel scan karta hai aur bitmap index ka direct intersection leta hai (super-fast).
+  - **`&&` across tables:** Formula Engine (FE) ko memory me materialization ke liye force kar sakta hai jo slow hota hai.
+
+---
+
+## 📌 Q008: Logical OR & The IN Operator (`IN` vs `||`)
+* **Formula:**
+  ```dax
+  Electronics & Home Decor Sales = CALCULATE([Total Net Sales], DimProduct[Category] IN { "Electronics", "Home Decor" })
+  ```
+* **Curly Braces `{}` kyu lagte hain?** DAX me `{}` **Table Constructor** hota hai jo 1-column temporary table banata hai. `IN` is table ke sath semi-join karta hai.
+* **`IN` vs `||`:** Chained `||` slow hota hai; `IN` ko engine optimized Hash Match me chalata hai.
+
+---
+
+## 📌 Q009: Removing Filters using ALL (`ALL(Column)` vs `ALL(Table)`)
+* **Formula:**
+  ```dax
+  All Products Sales = CALCULATE([Total Net Sales], ALL(DimProduct))
+  ```
+* **Business Problem:** Company ka overall benchmark total nikalna taaki har category apni performance compare kar sake.
+* **ALL(Column) vs ALL(Table) Trap:**
+  - `ALL(Column)` sirf us column ka filter hatata hai (doosre column ka slicer lagane par measure filter ho jayega).
+  - `ALL(Table)` puri table ke saare columns ke filters clear kar deta hai.
+
+---
+
+## 📌 Q010: Contribution % of Total Sales (`% of Total`)
+* **Formula:**
+  ```dax
+  % of Total Sales = DIVIDE([Total Net Sales], CALCULATE([Total Net Sales], ALL(DimProduct)), 0)
+  ```
+* **Business Problem:** Pareto 80/20 analysis—kaun si category business ka sabse bada revenue share drive karti hai.
+* **Numerator vs Denominator:** Numerator row ke filter context par calculate hota hai; denominator me `ALL()` se filter hatakar grand total nikalta hai.
