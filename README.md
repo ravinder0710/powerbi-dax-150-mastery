@@ -5,8 +5,17 @@
 ![Target Role](https://img.shields.io/badge/Role-Data_Analyst_%7C_0--2_Years-blue.svg)
 ![Status](https://img.shields.io/badge/Progress-10%2F150_(6.7%25)-brightgreen.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![Power BI Desktop](https://img.shields.io/badge/Power_BI_Desktop-100%25_Free-success.svg)
 
 A production-grade, highly focused interview preparation repository containing **150 battle-tested Power BI & DAX questions** specifically curated for **Freshers and 0–2 Years Experience Data Analysts**.
+
+---
+
+## 💻 Environment & Tooling (100% Free Practice)
+
+- **Power BI Desktop:** 100% Free to download and use on Windows (No credit card or Microsoft 365 subscription required).
+- **Core Capabilities Covered:** All 150 DAX measures, Data Modeling, Star Schemas, and Power Query transformations in this repository can be fully built and verified inside the free Power BI Desktop application.
+- **Enterprise Note:** In production IT environments, report authoring is done locally in Power BI Desktop, while cloud report sharing and scheduled refreshes utilize company-provided Power BI Pro/Premium accounts.
 
 ---
 
@@ -47,14 +56,3 @@ powerbi-dax-150-mastery/
 - **`DimDate`**: `Date`, `DateKey`, `Year`, `MonthNum`, `MonthName`, `Quarter`, `DayOfWeek`
 - **`DimStore`**: `StoreID`, `StoreName`, `Region`, `Country`
 - **`FactSales`**: `OrderNumber`, `OrderDateKey`, `ShipDateKey`, `ProductID`, `CustomerID`, `StoreID`, `Quantity`, `UnitPrice`, `DiscountAmount`, `TotalCost`
-
----
-
-## 💼 Power BI Licensing Guide (Interview Essentials)
-
-| License Tier | Cost | Industry Role & Developer Use Case |
-|:---|:---|:---|
-| **Power BI Desktop** | **100% Free** | Complete local report authoring, Data Modeling, DAX formulas, Power Query ETL, and dashboard visualization. **Zero cost for learning and development.** |
-| **Power BI Pro** | ~$10 / user / mo | Cloud deployment to Power BI Service, workspace collaboration, team report sharing, Row-Level Security (RLS) distribution, and Scheduled Refresh (up to 8x/day). |
-| **Power BI Premium / Fabric** | Capacity-based | Large-scale enterprise distribution (viewers do not need individual Pro licenses), AI integration, paginated reports, massive datasets (>1 GB), and 48x/day refresh. |
-
