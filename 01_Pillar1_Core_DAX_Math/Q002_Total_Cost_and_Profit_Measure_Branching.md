@@ -75,3 +75,16 @@ Total Profit =
 2. **Syntax Discipline:**
    - Table columns MUST have table prefixes: `FactSales[UnitCost]`.
    - Dynamic measures MUST be standalone: `[Total Net Sales]`.
+
+
+---
+
+## 🚨 Common Interview Traps & Defense
+
+1. **Trap: Why not write one monolithic formula?**
+   - *Interviewer:* "Why create two measures `[Total Cost]` and `[Total Profit]` instead of writing `Profit = SUMX(FactSales, Qty*Price - Discount) - SUMX(FactSales, Qty*Cost)` in one single measure?"
+   - *Defense:* This violates the DRY (Don't Repeat Yourself) principle. If discount logic changes, you'd have to update multiple complex formulas manually. Modular measure branching guarantees cascading updates and enables Formula Engine cache reuse.
+
+2. **Trap: Calculated Column for Profit:**
+   - *Interviewer:* "Can we create a calculated column for Profit in FactSales?"
+   - *Defense:* Adding calculated columns to large transactional fact tables severely degrades database compression and refresh time. Measures are strictly preferred.

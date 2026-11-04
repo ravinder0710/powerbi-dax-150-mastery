@@ -68,3 +68,16 @@ DIVIDE(
    - If the 3rd parameter is omitted, `DIVIDE()` defaults to `BLANK()`.
 3. **Engine Optimization (Blank vs Zero):**
    - Returning `BLANK()` enables Power BI visuals to automatically suppress empty rows, significantly speeding up visual rendering compared to forcing `0` across millions of inactive records.
+
+
+---
+
+## 🚨 Common Interview Traps & Defense
+
+1. **Trap: Why not use `IF([Total Net Sales] = 0, BLANK(), ...)`?**
+   - *Interviewer:* "Why use `DIVIDE()` when an `IF` statement can check for zero?"
+   - *Defense:* Writing `IF([Total Net Sales] = 0, ...)` forces the DAX engine to evaluate `[Total Net Sales]` twice (once for condition check, once for calculation). `DIVIDE()` evaluates the denominator once internally and handles zero/nulls with far better performance.
+
+2. **Trap: Returning 0 vs BLANK():**
+   - *Interviewer:* "Should we always provide `0` as the third parameter in `DIVIDE`?"
+   - *Defense:* No. In table and matrix visuals, returning `BLANK()` allows Power BI to automatically hide/suppress empty rows (sparse matrix optimization), speeding up rendering time. Providing `0` forces the visual to draw every single zero-value row.

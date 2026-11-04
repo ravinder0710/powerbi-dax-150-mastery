@@ -76,3 +76,16 @@ CALCULATE(
 1. **Why Comma `,` is Preferred over `&&`:**
    - Comma-separated filters are treated as independent arguments. The VertiPaq Storage Engine (SE) evaluates them in parallel using bitmap indexes and computes their intersection with maximum performance.
    - Using `&&` across multiple distinct tables can force the slower Formula Engine (FE) to materialize cross-table combinations in memory.
+
+
+---
+
+## 🚨 Common Interview Traps & Defense
+
+1. **Trap: Multi-table `&&` vs Comma:**
+   - *Interviewer:* "Both `&&` and comma give the same result. Why insist on comma `,`?"
+   - *Defense:* Comma-separated filters are passed as separate arguments, allowing the Storage Engine (SE) to scan dimension bitmaps in parallel and intersect them natively. `&&` across multiple tables can trigger Formula Engine (FE) materialization, causing performance degradation on massive datasets.
+
+2. **Trap: Table Filter vs Column Filter:**
+   - *Interviewer:* "Is `DimProduct[Category] = 'Electronics'` a column filter or a table filter?"
+   - *Defense:* It is evaluated as a table filter over `FILTER(ALL(DimProduct[Category]), ...)`.

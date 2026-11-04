@@ -72,3 +72,16 @@ CALCULATE(
    - In DAX, curly braces `{}` are the **Table Constructor** operator. It creates an anonymous single-column in-memory table. DAX evaluates `IN` as an optimized semi-join against this temporary table.
 2. **`IN` vs `||` (Logical OR):**
    - Chained `||` requires sequential boolean evaluation across rows. `IN` translates into an optimized Storage Engine (SE) hash match structure.
+
+
+---
+
+## 🚨 Common Interview Traps & Defense
+
+1. **Trap: Why not use Parentheses `()` like SQL?**
+   - *Interviewer:* "Why did you write `Category IN { 'Electronics', 'Home Decor' }` instead of `('Electronics', 'Home Decor')`?"
+   - *Defense:* In DAX, curly braces `{}` are the Table Constructor operator. They instantiate an anonymous single-column in-memory table. DAX evaluates `IN` as an optimized semi-join against this table.
+
+2. **Trap: Performance vs Chained OR (`||`):**
+   - *Interviewer:* "Why is `IN` faster than `Col = 'A' || Col = 'B'`?"
+   - *Defense:* `IN` is mapped by the Storage Engine to a hash-match filter structure, avoiding multiple sequential boolean comparisons.

@@ -68,3 +68,16 @@ SUMX(
 
 3. **DAX Syntax Best Practice:**
    - Always prefix columns with their table name (`FactSales[Quantity]`) to eliminate ambiguity with standalone measures.
+
+
+---
+
+## 🚨 Common Interview Traps & Defense
+
+1. **Trap: Calculated Column Defense:**
+   - *Interviewer:* "Why not create a Calculated Column `SalesAmount = Quantity * UnitPrice - DiscountAmount` directly in `FactSales` and then just use `SUM(SalesAmount)`?"
+   - *Defense:* Calculated columns are materialized during data refresh and permanently occupy RAM and disk space inside the VertiPaq engine. For multi-million row fact tables, this unnecessarily bloats the model size. A `SUMX` measure computes on-the-fly dynamically and preserves memory.
+
+2. **Trap: Table Prefix on Measures:**
+   - *Interviewer:* "Should we reference measures with their table name like `FactSales[Total Net Sales]`?"
+   - *Defense:* No. DAX best practice dictates that **columns** MUST have table prefixes (`FactSales[Quantity]`) and **measures** MUST be standalone (`[Total Net Sales]`). This avoids naming collisions and makes code immediately readable.

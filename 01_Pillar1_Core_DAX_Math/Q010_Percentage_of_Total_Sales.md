@@ -70,3 +70,19 @@ DIVIDE(
    - **Denominator (`CALCULATE([Total Net Sales], ALL(DimProduct))`):** `ALL()` clears the category filter, forcing evaluation across the entire company total (₹ 7,130).
 2. **Safe Division:**
    - `DIVIDE()` protects against divide-by-zero exceptions if net sales are zero or blank.
+
+
+---
+
+## 🚨 Common Interview Traps & Defense
+
+1. **Trap: Why not use simple division `/`?**
+   - *Interviewer:* "Why wrap `% of Total` in `DIVIDE()` if the denominator is the Grand Total?"
+   - *Defense:* If filters on other tables result in zero enterprise sales or empty datasets, `/` crashes with `NaN` or `Infinity`. `DIVIDE()` guarantees visual stability.
+
+2. **Trap: Single Measure vs Measure Branching in Interviews:**
+   - *Interviewer:* "Write `% of Total` without relying on any pre-built Grand Total measure."
+   - *Defense:* Use the golden pattern:
+     ```dax
+     % of Total = DIVIDE([Total Net Sales], CALCULATE([Total Net Sales], ALL(DimProduct)), 0)
+     ```

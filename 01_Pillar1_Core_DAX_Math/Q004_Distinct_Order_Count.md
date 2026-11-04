@@ -61,3 +61,16 @@ DISTINCTCOUNT(FactSales[OrderID])
 2. **`COUNTROWS(Table)` vs `COUNT(Column)` Performance:**
    - Always prefer `COUNTROWS(FactSales)` over `COUNT(FactSales[OrderID])` when counting physical records.
    - `COUNTROWS` retrieves the row count directly from VertiPaq engine table metadata without scanning column data pages.
+
+
+---
+
+## 🚨 Common Interview Traps & Defense
+
+1. **Trap: The BLANK OrderID trap:**
+   - *Interviewer:* "What happens if there are blank rows in `OrderID`? Does `DISTINCTCOUNT` count them?"
+   - *Defense:* Yes! `DISTINCTCOUNT()` treats `BLANK()` as a distinct category and adds +1. If business rules dictate that blank order IDs must not be counted, use `DISTINCTCOUNTNOBLANK(FactSales[OrderID])`.
+
+2. **Trap: COUNT vs COUNTROWS Performance:**
+   - *Interviewer:* "Why is `COUNTROWS(Table)` faster than `COUNT(Table[Column])`?"
+   - *Defense:* `COUNT(Col)` scans every data cell in that column to verify non-null values. `COUNTROWS(Table)` reads the row count directly from VertiPaq internal table metadata without scanning any data pages.

@@ -64,3 +64,16 @@ CALCULATE(
 2. **`ALL(Column)` vs `ALL(Table)`:**
    - `ALL(DimProduct[Category])` clears filters from `Category` only. If other columns like `Color` or `SubCategory` are sliced, they continue to filter the measure.
    - `ALL(DimProduct)` clears all filters from the entire dimension table, guaranteeing an absolute grand total.
+
+
+---
+
+## 🚨 Common Interview Traps & Defense
+
+1. **Trap: Slicer interaction with `ALL(Column)` vs `ALL(Table)`:**
+   - *Interviewer:* "If the report page has a slicer on `Color = 'Red'`, will `ALL(DimProduct[Category])` ignore the Color slicer?"
+   - *Defense:* No! `ALL(DimProduct[Category])` only strips the filter from the Category column. The Color slicer will still filter the measure. To ignore all slicers on the product dimension, you must use `ALL(DimProduct)`.
+
+2. **Trap: `ALL()` as a Table Function vs Filter Modifier:**
+   - *Interviewer:* "Can `ALL()` return a table?"
+   - *Defense:* Yes. Outside `CALCULATE()`, `ALL(Table)` returns the full un-duplicated table without filters. Inside `CALCULATE()`, it acts as a filter removal modifier.

@@ -82,3 +82,16 @@ CALCULATE(
          DimProduct[Category] = "Electronics"
      )
      ```
+
+
+---
+
+## 🚨 Common Interview Traps & Defense
+
+1. **Trap: Wrapping Measures in `SUM()`:**
+   - *Interviewer:* "Why not write `CALCULATE(SUM([Total Net Sales]), ...)`?"
+   - *Defense:* Measures already encapsulate their calculation logic. `SUM()` only takes physical table columns. Passing a measure inside `SUM` causes a syntax compilation error.
+
+2. **Trap: Order of Execution in CALCULATE:**
+   - *Interviewer:* "In `CALCULATE(Expression, Filter)`, which part evaluates first?"
+   - *Defense:* The filter arguments evaluate first in the outer filter context. Once the filter context is transformed, the first parameter (expression) evaluates inside that new modified context.

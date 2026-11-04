@@ -86,3 +86,16 @@ DIVIDE(
    - **Granularity (Grain) Mismatch:** Averaging rows in a transaction fact table calculates the average price per *line item*, not per *order*. Orders containing multiple products would be severely understated.
 2. **Safe Division:**
    - Both AOV and UPT must be wrapped in `DIVIDE()` to handle cases where zero orders are placed during an inactive period.
+
+
+---
+
+## 🚨 Common Interview Traps & Defense
+
+1. **Trap: Why not `AVERAGE(FactSales[Quantity])` or `AVERAGE([Total Net Sales])`?**
+   - *Interviewer:* "Can't we just use the `AVERAGE` function to calculate Average Order Value?"
+   - *Defense:* First, `AVERAGE([Measure])` throws a syntax error because `AVERAGE` only accepts physical columns. Second, even with a sales column, `AVERAGE` computes line-item average, not transaction order-level average (grain mismatch).
+
+2. **Trap: Zero orders placed:**
+   - *Interviewer:* "What if a store has 0 orders in a month?"
+   - *Defense:* Always wrap AOV and UPT in `DIVIDE()` to safely handle zero-order periods without runtime crashes.
