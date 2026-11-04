@@ -4,6 +4,7 @@
 ![Power BI Challenge](https://img.shields.io/badge/Power_BI-Top_150_Interview_Challenge-yellow.svg)
 ![Target Role](https://img.shields.io/badge/Role-Data_Analyst_%7C_0--2_Years-blue.svg)
 ![Status](https://img.shields.io/badge/Progress-10%2F150_(6.7%25)-brightgreen.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 A production-grade, highly focused interview preparation repository containing **150 battle-tested Power BI & DAX questions** specifically curated for **Freshers and 0–2 Years Experience Data Analysts**.
 
