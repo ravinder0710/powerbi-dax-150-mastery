@@ -50,3 +50,17 @@
 * **Business Problem:** E-commerce me ek order me multiple items hone par duplicate rows hoti hain. `COUNTROWS` lene se order count galat (inflated) ho jayega.
 * **Blank Trap:** `DISTINCTCOUNT` blank value ko bhi count (+1) kar leta hai. Blank ignore karne ke liye **`DISTINCTCOUNTNOBLANK(Column)`** use karte hain.
 * **COUNTROWS vs COUNT:** `COUNTROWS(Table)` hamesha fast hota hai kyunki ye VertiPaq metadata se direct total rows utha leta hai bina data page scan kiye.
+
+
+---
+
+## 📌 Q005: Average Order Value (AOV) & Basket Size (UPT)
+* **Formulas:**
+  ```dax
+  Average Order Value = DIVIDE([Total Net Sales], [Total Orders Placed], 0)
+  Units Per Transaction = DIVIDE(SUM(FactSales[Quantity]), [Total Orders Placed], 0)
+  ```
+* **Business Problem:** Retail business ko customer ka buying pattern samajhna hota hai—har order par kitne rupaye ka transaction hua aur average kitni items khareedi gayi.
+* **Direct AVERAGE() kyu fail hota hai?**
+  1. **Syntax Rule:** DAX me `AVERAGE([Measure])` syntax error deta hai. Wo sirf physical column leta hai.
+  2. **Grain Mismatch:** Fact table ki rows ko average karne se **Line-Item Average** nikalta hai, **Order-level Average** nahi! Kyunki 1 order me multiple items hote hain. Sahi formula hamesha `Total Sales / Total Orders` hota hai.
