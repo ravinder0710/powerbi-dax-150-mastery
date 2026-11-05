@@ -19,16 +19,16 @@ A production-grade, highly focused interview preparation repository containing *
 
 ---
 
-## 🗂️ Curriculum & Progress Tracker (10 / 150)
+## 🗂️ Curriculum & Progress Tracker (19 / 150)
 
 | Pillar | Topic / Area | Target Questions | Completed | Status |
 |:---|:---|:---:|:---:|:---|
-| **Pillar 1** | **Core DAX Aggregations & Math** (Qs 001 – 030) | 30 | 10 | `[███░░░░░░░] 33%` |
+| **Pillar 1** | **Core DAX Aggregations & Math** (Qs 001 – 030) | 30 | 19 | `[██████░░░░] 63%` |
 | **Pillar 2** | **Logical, Text & Conditional DAX** (Qs 031 – 060) | 30 | 0 | `[░░░░░░░░░░] 0%` |
 | **Pillar 3** | **Filter Context King (`CALCULATE` & Modifiers)** (Qs 061 – 090) | 30 | 0 | `[░░░░░░░░░░] 0%` |
 | **Pillar 4** | **Time Intelligence Masterclass** (Qs 091 – 120) | 30 | 0 | `[░░░░░░░░░░] 0%` |
 | **Pillar 5** | **Data Modeling, Relationships & Service** (Qs 121 – 150) | 30 | 0 | `[░░░░░░░░░░] 0%` |
-| **TOTAL** | **5 Core Pillars** | **150** | **10** | **10 / 150 (6.7%)** |
+| **TOTAL** | **5 Core Pillars** | **150** | **19** | **19 / 150 (12.7%)** |
 
 ---
 
@@ -46,6 +46,15 @@ A production-grade, highly focused interview preparation repository containing *
 | **Q008** | Lifestyle Bundled Revenue | Set Membership & Table Constructor (`IN` with `{}`) | Myntra, Nykaa, Meesho | [Q008 Solution ↗](01_Pillar1_Core_DAX_Math/Q008_Calculate_Logical_OR_IN.md) |
 | **Q009** | Universal Enterprise Benchmark | Removing Filters using `ALL(Table)` vs `ALL(Column)` | Microsoft, Google, Uber | [Q009 Solution ↗](01_Pillar1_Core_DAX_Math/Q009_Calculate_ALL_Clear_Filters.md) |
 | **Q010** | Category Contribution Ratio | Pareto Analysis & Percentage of Total (`% of Total`) | McKinsey, BCG, Bain Analytics | [Q010 Solution ↗](01_Pillar1_Core_DAX_Math/Q010_Percentage_of_Total_Sales.md) |
+| **Q011** | Max Single Line Sale | Row-by-Row Maximum using `MAXX` Iterator | Amazon, Flipkart, Walmart | [Q011 Solution ↗](01_Pillar1_Core_DAX_Math/Q011_Max_Sale_Value_MAXX.md) |
+| **Q012** | Min Paid Sale Value | Zero Exclusion Filtering using `MINX` & `FILTER` | D-Mart, Reliance Fresh, BigBasket | [Q012 Solution ↗](01_Pillar1_Core_DAX_Math/Q012_Min_Paid_Sale_Value_MINX.md) |
+| **Q013** | Average Daily Sales (ADS) | Daily Run-Rate using `AVERAGEX` & `VALUES` | Fractal Analytics, Tiger Analytics | [Q013 Solution ↗](01_Pillar1_Core_DAX_Math/Q013_Average_Daily_Sales_AVERAGEX.md) |
+| **Q014** | ASP vs AOV Unit Economics | Volume-Weighted Selling Price vs Order Basket | Zara, H&M, Nykaa | [Q014 Solution ↗](01_Pillar1_Core_DAX_Math/Q014_ASP_vs_AOV_Ratios.md) |
+| **Q015** | Realized Discount % | Discount Erosion vs Gross MRP Sales | Landmark Group, Aditya Birla Retail | [Q015 Solution ↗](01_Pillar1_Core_DAX_Math/Q015_Realized_Discount_Percentage.md) |
+| **Q016** | Safe Null Fallback Display | Eliminating Blanks cleanly with `COALESCE` | Accenture, Deloitte, TCS | [Q016 Solution ↗](01_Pillar1_Core_DAX_Math/Q016_Safe_Null_Handling_COALESCE.md) |
+| **Q017** | Incomplete Profile Audit | Data Quality Governance using `COUNTBLANK` | Infosys, Wipro, Cognizant | [Q017 Solution ↗](01_Pillar1_Core_DAX_Math/Q017_Count_Blank_and_Missing_Records.md) |
+| **Q018** | Strict Zero vs Blank Audit | Lenient Equality `=` vs Strict Equality `==` | KPMG, EY, PwC | [Q018 Solution ↗](01_Pillar1_Core_DAX_Math/Q018_Strict_Equality_Blank_vs_Zero.md) |
+| **Q019** | Omnichannel Revenue Consolidation | Safe Multi-Channel Addition & Blank Auto-Suppression | Croma, Reliance Digital, Apple | [Q019 Solution ↗](01_Pillar1_Core_DAX_Math/Q019_Safe_Omnichannel_Addition_COALESCE.md) |
 
 ---
 

@@ -305,3 +305,195 @@ DIVIDE(
 * **Trap 2: Direct Single Measure:**
   * *Interviewer:* *"Bina kisi helper measure ke direct ek measure me likho."*
   * *Aapka Jawab:* *"Numerator me direct `[Total Net Sales]` aur denominator me `CALCULATE([Total Net Sales], ALL(DimProduct))` daal kar `DIVIDE` me wrap kar denge."*
+
+
+---
+
+## 📌 Q011: Row-by-Row Maximum Value (`MAXX` vs `MAX`)
+
+### 💡 Production DAX:
+```dax
+Max Sale Value = 
+MAXX(FactSales, FactSales[Quantity] * FactSales[UnitPrice])
+```
+
+### 🏢 Business Scenario (Interviewer kaise puchega & Aapko kya bolna hai):
+* **Interviewer:** *"Retail store manager ko single line-item me sabse badi sale nikalni hai. Fact table me direct sales column nahi hai, sirf Quantity aur UnitPrice diye hain. Kaise karoge?"*
+* **Aapka Professional Jawab:**
+  > *"Sir, hum `MAXX` iterator function use karenge jo `FactSales` par Row Context banakar row-by-row `Quantity * UnitPrice` multiply karega aur unme se highest single-item sale return karega."*
+
+### 🧠 Deep Concept:
+* `MAX(Table[Col])` sirf ek single column par chalta hai, do columns ke beech multiplication nahi kar sakta.
+* `MAXX(Table, Expression)` row-by-row calculation karke maximum value nikalta hai.
+
+### 🚨 Common Interview Traps & Defense:
+* **Trap: `MAX()` do arguments kab leta hai?**
+  * *Defense:* "`MAX(val1, val2)` do scalar values ko compare karne ke liye 2 arguments leta hai (e.g. `MAX(10, 25)` -> 25). Lekin multi-row expressions ke liye iterator `MAXX` hi lagta hai."
+
+---
+
+## 📌 Q012: Row-by-Row Minimum with Zero Exclusion (`MINX` & `FILTER`)
+
+### 💡 Production DAX:
+```dax
+Min Paid Sale Value = 
+MINX(
+    FILTER(FactSales, FactSales[UnitPrice] > 0),
+    FactSales[Quantity] * FactSales[UnitPrice]
+)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Hamare data me free samples aur zero-price promotional items hain. Lowest paid sale nikalni hai (> ₹ 0). Direct `MIN()` kyu fail hoga?"*
+* **Aapka Professional Jawab:**
+  > *"Sir, direct `MIN()` lagane par answer ₹ 0 aayega jo commercial pricing ko misguide karega. Hum `FILTER` table function se pehle ₹ 0 wali rows ko exclude karenge aur fir `MINX` se lowest paid sale nikalenge."*
+
+### 🚨 Common Interview Traps & Defense:
+* **Trap: `FILTER` vs `CALCULATE` inside `MINX`:**
+  * *Defense:* "`CALCULATE(MINX(FactSales, Qty*Price), FactSales[UnitPrice] > 0)` bhi likh sakte hain jo VertiPaq Storage Engine bitmap filtering use karke fast execute hota hai."
+
+---
+
+## 📌 Q013: Average Daily Sales using `AVERAGEX` & `VALUES`
+
+### 💡 Production DAX:
+```dax
+Average Daily Sales = 
+AVERAGEX(
+    VALUES(DimDate[Date]),
+    [Total Net Sales]
+)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"February me 28 din hote hain aur March me 31 din. True month-over-month run-rate compare karne ke liye Average Daily Sales kaise nikaloge?"*
+* **Aapka Professional Jawab:**
+  > *"Sir, hum `AVERAGEX` iterator use karenge jisme pehla parameter `VALUES(DimDate[Date])` aayega jo visible calendar dates dega, aur doosra parameter `[Total Net Sales]` aayega jo har date par Context Transition ke through daily sales evaluate karega aur unka average dega."*
+
+### 🧠 Deep Concept (Context Transition):
+* `[Total Net Sales]` ek measure hai jiske andar implicit `CALCULATE()` hota hai.
+* Jab `AVERAGEX` dates par iterate karta hai, to date ka Row Context **Filter Context** me convert ho jata hai (Context Transition).
+
+### 🚨 Common Interview Traps & Defense:
+* **Trap: `VALUES()` vs `ALL()` in AVERAGEX:**
+  * *Defense:* "`ALL()` ignore kar dega user ke slicer ko aur saare 365 din se divide kar dega. `VALUES()` current slicer context ki dates ko respect karta hai."
+
+---
+
+## 📌 Q014: Average Selling Price (ASP) vs Average Order Value (AOV)
+
+### 💡 Production DAX:
+```dax
+Average Selling Price (ASP) = 
+DIVIDE([Total Net Sales], SUM(FactSales[Quantity]), 0)
+
+Average Order Value (AOV) = 
+DIVIDE([Total Net Sales], [Total Orders Placed], 0)
+```
+
+### 🏢 Business Scenario (The Retail Difference):
+* **ASP:** Per-unit realization ($\text{Total Sales} / \text{Total Quantity}$).
+* **AOV:** Per-basket transaction ($\text{Total Sales} / \text{Total Orders}$).
+* **Golden Retail Equation:** $\text{AOV} = \text{ASP} \times \text{UPT}$ (Average Order Value = Average Selling Price $\times$ Units Per Transaction).
+
+### 🚨 Common Interview Traps & Defense:
+* **Trap: Why not `AVERAGE(UnitPrice)` for ASP?**
+  * *Defense:* "`AVERAGE(UnitPrice)` unweighted average deta hai jo galat hai. True ASP hamesha volume-weighted hota hai (`Total Sales / Total Quantity`)."
+
+---
+
+## 📌 Q015: Realized Discount Percentage (`Total Discount / Gross Sales`)
+
+### 💡 Production DAX:
+```dax
+Total Gross Sales = SUMX(FactSales, FactSales[Quantity] * FactSales[UnitPrice])
+Total Discount Amount = SUM(FactSales[DiscountAmount])
+
+Realized Discount % = 
+DIVIDE([Total Discount Amount], [Total Gross Sales], 0)
+```
+
+### 🏢 Business Scenario (Gross vs Net Sales):
+* **Gross Sales:** Original sticker price / MRP billing ($\text{Qty} \times \text{Price}$).
+* **Net Sales:** Actual bank revenue after discounts ($\text{Gross} - \text{Discount}$). Company profit hamesha Net Sales par evaluate hota hai.
+
+### 🚨 Common Interview Traps & Defense:
+* **Trap: Net Sales se divide kyu nahi kiya?**
+  * *Defense:* "Commercial discounts hamesha original sticker price (Gross MRP) par offer hote hain, isliye base hamesha Gross Sales hota hai."
+
+---
+
+## 📌 Q016: Safe Null Handling & Fallback Display (`COALESCE` vs `ISBLANK`)
+
+### 💡 Production DAX:
+```dax
+Sales Display Value = 
+COALESCE([Total Net Sales], 0)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Naye products jinki koi sale nahi hui wahan visual me Blank dikh raha hai. Client ko 0 chahiye, kaise karoge?"*
+* **Aapka Professional Jawab:**
+  > *"Sir, hum modern DAX ka `COALESCE()` function use karenge. Ye pehli non-blank value return karta hai, aur blank hone par fallback 0 de deta hai bina duplicate measure evaluation ke."*
+
+### 🚨 Common Interview Traps & Defense:
+* **Trap: `COALESCE` vs `+ 0` trick:**
+  * *Defense:* "`+ 0` lagana auto-blank suppression ko destroy kar deta hai jisse hazaron empty rows visual me draw hone lagti hain aur dashboard slow ho jata hai."
+
+---
+
+## 📌 Q017: Counting Missing Records (`COUNTBLANK` vs `COUNTROWS(FILTER)`)
+
+### 💡 Production DAX:
+```dax
+Incomplete Profiles = 
+COUNTBLANK(DimCustomer[City])
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Data Governance audit me missing customer profiles ginni hain jahan City blank hai."*
+* **Aapka Professional Jawab:**
+  > *"Sir, single column ke blanks count karne ke liye `COUNTBLANK(Table[Column])` direct aur fastest function hai. Multi-column checks ke liye hum `COUNTROWS(FILTER(Table, ISBLANK(Col1) || ISBLANK(Col2)))` use karte hain."*
+
+---
+
+## 📌 Q018: Strict Equality Operator (`==` vs `=`)
+
+### 💡 Production DAX:
+```dax
+Zero Discount Products = 
+COUNTROWS(
+    FILTER(
+        DimProduct,
+        DimProduct[DiscountGiven] == 0
+    )
+)
+```
+
+### 🧠 Deep Theory: Blank vs Zero:
+* In DAX: `0 = BLANK()` evaluates to **TRUE**!
+* In DAX: `0 == BLANK()` evaluates strictly to **FALSE**!
+* Double `==` strict value aur data type matching enforce karta hai.
+
+---
+
+## 📌 Q019: Safe Omnichannel Mathematical Addition (`COALESCE` & Variables)
+
+### 💡 Production DAX:
+```dax
+Total Omnichannel Sales = 
+COALESCE([Store Net Sales], 0) + COALESCE([Online Net Sales], 0)
+```
+
+### 🧠 Senior Pattern (Preserving Blank Suppression with Variables):
+```dax
+Total Omnichannel Sales = 
+VAR StoreSales = [Store Net Sales]
+VAR OnlineSales = [Online Net Sales]
+RETURN
+IF(
+    ISBLANK(StoreSales) && ISBLANK(OnlineSales),
+    BLANK(),
+    COALESCE(StoreSales, 0) + COALESCE(OnlineSales, 0)
+)
+```
