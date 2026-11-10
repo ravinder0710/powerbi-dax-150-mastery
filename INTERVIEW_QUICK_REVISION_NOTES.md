@@ -523,3 +523,152 @@ SWITCH(
 ### 🚨 Common Interview Traps:
 * **Trap 1: Trying to put Measure in a Slicer:** Power BI me Measure ko Slicer field me drag & drop karna allowed hi nahi hai.
 * **Trap 2: Storage vs Performance:** Calculated Column data refresh ke waqt calculate hokar VertiPaq RAM me space leta hai (Row Context), jabki Measure query-time par compute hota hai (Filter Context). Static buckets agar possible ho toh SQL View ya Power Query me banana best practice hai, par DAX me banana ho toh Calculated Column use hoga.
+
+
+---
+
+## 📌 Q021: Active Customer Penetration % (Conversion Ratio)
+
+### 💡 Production DAX:
+```dax
+Active Customer % = 
+DIVIDE(
+    DISTINCTCOUNT(FactSales[CustomerKey]),
+    COUNTROWS(DimCustomer),
+    0
+)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Registered customer base me se kitne percent logon ne actual purchase kiya hai, iska KPI measure likho."*
+* **Aapka 1–2 Yr Analyst Professional Jawab:**
+  > *"Sir, Numerator me `FactSales[CustomerKey]` par `DISTINCTCOUNT` chalega kyunki ek customer ke multiple orders ho sakte hain. Denominator me master table `DimCustomer` par `COUNTROWS` chalega. Dono ko safe division ke liye `DIVIDE` me wrap karenge taaki zero division error na aaye."*
+
+### 🚨 Common Interview Traps:
+* **Trap 1: `COUNT` vs `DISTINCTCOUNT` on Fact Table:** Agar FactSales par normal `COUNT` laga diya toh wo order rows count kar lega (repeat orders ko alag customer samajh lega).
+* **Trap 2: Context Filtering vs Global Benchmark:** Slicer lagane par dono numerator aur denominator filter honge. Agar interviewer bole ki "Denominator hamesha total registered customers hi rehna chahiye irrespective of slicer", toh Denominator me `COUNTROWS(ALL(DimCustomer))` lagana hoga.
+
+
+---
+
+## 📌 Q022: Multi-Table Iterator & The `RELATED` Function
+
+### 💡 Production DAX:
+```dax
+Total Cost = 
+SUMX(
+    FactSales,
+    FactSales[Quantity] * RELATED(DimProduct[StandardCost])
+)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Fact table me Quantity hai, lekin Cost Price DimProduct me hai. Row-by-row Total Cost kaise nikaloge? Kya direct multiply kar sakte hain?"*
+* **Aapka 1–2 Yr Analyst Professional Jawab:**
+  > *"Sir, direct multiply nahi kar sakte kyunki `SUMX` ka Row Context automatically relationship follow nahi karta. Many side (`FactSales`) se One side (`DimProduct`) ka value pull karne ke liye `RELATED()` function use karna mandatory hota hai."*
+
+### 🚨 Common Interview Traps:
+* **Trap 1: `RELATED` vs `RELATEDTABLE`:** 
+  - `RELATED(Column)`: Many-to-One traversal karta hai aur single value (scalar) return karta hai.
+  - `RELATEDTABLE(Table)`: One-to-Many traversal karta hai aur puri table return karta hai (e.g. `COUNTROWS(RELATEDTABLE(FactSales))`).
+* **Trap 2: Active Relationship Requirement:** `RELATED()` sirf tab kaam karta hai jab model me active relationship pehle se bani ho. Agar relationship nahi hai toh `LOOKUPVALUE()` use karna padta hai.
+
+
+---
+
+## 📌 Q023: Disconnected Table Lookups (`LOOKUPVALUE` vs `RELATED`)
+
+### 💡 Production DAX:
+```dax
+Target Margin Rate = 
+LOOKUPVALUE(
+    SalesTargets[TargetMarginRate],
+    SalesTargets[ProductCategory],
+    FactSales[ProductCategory],
+    0.10 -- Optional default fallback
+)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Agar do tables ke beech physical relationship nahi hai (disconnected table), toh kya `RELATED()` kaam karega? Aur bina relationship ke dusri table se value kaise laoge?"*
+* **Aapka 1–2 Yr Analyst Professional Jawab:**
+  > *"Sir, `RELATED()` strictly active relationship mangta hai, bina relationship ke wo kaam nahi karega. Disconnected tables ya dynamic criteria ke liye hum `LOOKUPVALUE()` use karte hain (jo Excel ke XLOOKUP jaisa kaam karta hai).*
+  > *Syntax: `LOOKUPVALUE(ResultColumn, SearchColumn, SearchValue, [AlternateResult])`."*
+
+### 🚨 Common Interview Traps:
+* **Trap 1: Multiple Matches Error:** Agar search table me same category ke do alag-alag rate mil gaye, toh `LOOKUPVALUE` runtime error de dega. Search column me values unique honi chahiye.
+* **Trap 2: Performance:** Agar model me already relationship exist karti hai, toh hamesha `RELATED()` prefer karna chahiye kyunki wo VertiPaq pre-indexed pointers use karta hai aur `LOOKUPVALUE` se kaafi fast hota hai.
+
+
+---
+
+## 📌 Q024: Text Concatenation Across Rows (`CONCATENATEX`)
+
+### 💡 Production DAX:
+```dax
+Purchased Products List = 
+CONCATENATEX(
+    VALUES(FactSales[ProductName]),
+    FactSales[ProductName],
+    ", ",
+    FactSales[ProductName],
+    ASC
+)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Customer profile card ya tooltip me khareede gaye sabhi products ke naam ek comma-separated text string me kaise dikhaoge?"*
+* **Aapka 1–2 Yr Analyst Professional Jawab:**
+  > *"Sir, rows ke text strings ko concatenate karne ke liye DAX ka akela text iterator `CONCATENATEX` use hota hai. Duplicate products avoid karne ke liye hum table parameter me `VALUES(Table[Column])` pass karte hain aur 4th/5th parameter se alphabetical sort kar dete hain."*
+
+### 🚨 Common Interview Traps:
+* **Trap 1: `VALUE` vs `VALUES`:** `VALUE()` scalar function hai jo string ko number banata hai, jabki `VALUES()` table function hai jo unique values ki table deta hai.
+* **Trap 2: Large String Performance:** Agar filter context broad ho (e.g. bina filter ke puri table par chalana), toh visual memory explode ho sakti hai. Isliye enterprise me hum `HASONEVALUE()` ya `TOPN` guardrails lagate hain.
+
+
+---
+
+## 📌 Q025: Outlier-Resilient Central Tendency (`MEDIAN` & `MEDIANX`)
+
+### 💡 Production DAX:
+```dax
+Median Order Value = 
+MEDIANX(
+    FactSales,
+    FactSales[Quantity] * FactSales[UnitPrice]
+)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Jab data me extreme outliers (jaise ek single \$50k ka order) pure average ko distort kar rahe ho, toh typical customer spend dikhane ke liye konsa DAX function use karoge?"*
+* **Aapka 1–2 Yr Analyst Professional Jawab:**
+  > *"Sir, `AVERAGE` outliers se jaldi skew ho jata hai. Aise scenario me central tendency represent karne ke liye 50th percentile yaani `MEDIAN` use kiya jata hai. Agar row-by-row expression ka median nikalna ho, toh hum iterator `MEDIANX(Table, Expression)` use karte hain."*
+
+### 🚨 Common Interview Traps:
+* **Trap 1: Even vs Odd Rows:** DAX ka `MEDIAN` agar even number of rows milein toh middle ke 2 values ka average khud nikal deta hai.
+* **Trap 2: Performance:** `AVERAGE` simple sum/count karta hai jabki `MEDIAN` ko data sort karna padta hai 50th percentile dhundne ke liye, isliye multi-million rows par `MEDIAN` slightly zyada CPU time leta hai.
+
+
+---
+
+## 📌 Q026: Financial Rounding (`ROUND` vs `MROUND`)
+
+### 💡 Production DAX:
+```dax
+-- Measure 1: 2 Decimal Places
+Incentive Rounded (2 Decimals) = 
+ROUND(SUM(FactDeliveryPayout[CalculatedIncentive]), 2)
+
+-- Measure 2: Nearest Multiple of 5
+Cash Payout (Multiple of 5) = 
+MROUND(SUM(FactDeliveryPayout[CalculatedIncentive]), 5)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Financial reports me decimal rounding aur cash payout me nearest multiple rounding (e.g. ₹ 5 ya ₹ 10) kaise karte hain?"*
+* **Aapka 1–2 Yr Analyst Professional Jawab:**
+  > *"Sir, decimal places fix karne ke liye `ROUND(Number, Digits)` use hota hai. Kisi business multiple (jaise 5, 10, 50) ke nearest number par round karne ke liye `MROUND(Number, Multiple)` use hota hai. Always up ke liye `CEILING` aur always down ke liye `FLOOR` use karte hain."*
+
+### 🚨 Common Interview Traps:
+* **Trap 1: Negative Digits in `ROUND`:** Agar `ROUND(1250, -2)` likhenge toh result `1300` aayega (hundreds digit par round karega).
+* **Trap 2: `MROUND` Sign Mismatch Error:** Agar number negative ho aur multiple positive (jaise `MROUND(-48, 5)`), toh DAX runtime error fek deta hai. Dono ka sign same hona zaroori hai.
