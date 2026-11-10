@@ -497,3 +497,29 @@ IF(
     COALESCE(StoreSales, 0) + COALESCE(OnlineSales, 0)
 )
 ```
+
+
+---
+
+## 📌 Q020: Calculated Column vs Measure (Slicer Bucketing & Categorization)
+
+### 💡 Production DAX (Calculated Column in `DimProduct`):
+```dax
+Price Category = 
+SWITCH(
+    TRUE(),
+    DimProduct[UnitPrice] < 20, "Budget",
+    DimProduct[UnitPrice] <= 100, "Mid-Range",
+    DimProduct[UnitPrice] > 100, "Premium",
+    "Unknown"
+)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Products ko price ke hisaab se categorize karke ek Slicer/Filter banana hai. Aap Calculated Column banaoge ya Measure? Kyu?"*
+* **Aapka 1–2 Yr Analyst Professional Jawab:**
+  > *"Sir, Slicers, Matrix Rows/Columns, aur Chart Axes ke liye distinct dimensional values chahiye hoti hain jo data model me physically exist karein. Measure dynamically scalar aggregate return karta hai aur visual canvas par filter options generate nahi kar sakta, isliye Slicing aur Bucketing ke liye **Calculated Column mandatory** hota hai."*
+
+### 🚨 Common Interview Traps:
+* **Trap 1: Trying to put Measure in a Slicer:** Power BI me Measure ko Slicer field me drag & drop karna allowed hi nahi hai.
+* **Trap 2: Storage vs Performance:** Calculated Column data refresh ke waqt calculate hokar VertiPaq RAM me space leta hai (Row Context), jabki Measure query-time par compute hota hai (Filter Context). Static buckets agar possible ho toh SQL View ya Power Query me banana best practice hai, par DAX me banana ho toh Calculated Column use hoga.

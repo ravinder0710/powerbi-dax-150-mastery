@@ -3,7 +3,7 @@
 
 ![Power BI Challenge](https://img.shields.io/badge/Power_BI-Top_150_Interview_Challenge-yellow.svg)
 ![Target Role](https://img.shields.io/badge/Role-Data_Analyst_%7C_0--2_Years-blue.svg)
-![Status](https://img.shields.io/badge/Progress-10%2F150_(6.7%25)-brightgreen.svg)
+![Status](https://img.shields.io/badge/Progress-20%2F150_(13.3%25)-brightgreen.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 ![Power BI Desktop](https://img.shields.io/badge/Power_BI_Desktop-100%25_Free-success.svg)
 
@@ -19,16 +19,16 @@ A production-grade, highly focused interview preparation repository containing *
 
 ---
 
-## 🗂️ Curriculum & Progress Tracker (19 / 150)
+## 🗂️ Curriculum & Progress Tracker (20 / 150)
 
 | Pillar | Topic / Area | Target Questions | Completed | Status |
 |:---|:---|:---:|:---:|:---|
-| **Pillar 1** | **Core DAX Aggregations & Math** (Qs 001 – 030) | 30 | 19 | `[██████░░░░] 63%` |
+| **Pillar 1** | **Core DAX Aggregations & Math** (Qs 001 – 030) | 30 | 20 | `[███████░░░] 67%` |
 | **Pillar 2** | **Logical, Text & Conditional DAX** (Qs 031 – 060) | 30 | 0 | `[░░░░░░░░░░] 0%` |
 | **Pillar 3** | **Filter Context King (`CALCULATE` & Modifiers)** (Qs 061 – 090) | 30 | 0 | `[░░░░░░░░░░] 0%` |
 | **Pillar 4** | **Time Intelligence Masterclass** (Qs 091 – 120) | 30 | 0 | `[░░░░░░░░░░] 0%` |
 | **Pillar 5** | **Data Modeling, Relationships & Service** (Qs 121 – 150) | 30 | 0 | `[░░░░░░░░░░] 0%` |
-| **TOTAL** | **5 Core Pillars** | **150** | **19** | **19 / 150 (12.7%)** |
+| **TOTAL** | **5 Core Pillars** | **150** | **20** | **20 / 150 (13.3%)** |
 
 ---
 
@@ -55,6 +55,7 @@ A production-grade, highly focused interview preparation repository containing *
 | **Q017** | Incomplete Profile Audit | Data Quality Governance using `COUNTBLANK` | Infosys, Wipro, Cognizant | [Q017 Solution ↗](01_Pillar1_Core_DAX_Math/Q017_Count_Blank_and_Missing_Records.md) |
 | **Q018** | Strict Zero vs Blank Audit | Lenient Equality `=` vs Strict Equality `==` | KPMG, EY, PwC | [Q018 Solution ↗](01_Pillar1_Core_DAX_Math/Q018_Strict_Equality_Blank_vs_Zero.md) |
 | **Q019** | Omnichannel Revenue Consolidation | Safe Multi-Channel Addition & Blank Auto-Suppression | Croma, Reliance Digital, Apple | [Q019 Solution ↗](01_Pillar1_Core_DAX_Math/Q019_Safe_Omnichannel_Addition_COALESCE.md) |
+| **Q020** | Slicer Price Bucketing | Calculated Column vs Measure Architectural Choice | Adobe, Salesforce, PayTM | [Q020 Solution ↗](01_Pillar1_Core_DAX_Math/Q020_Calculated_Column_vs_Measure_Slicer.md) |
 
 ---
 
