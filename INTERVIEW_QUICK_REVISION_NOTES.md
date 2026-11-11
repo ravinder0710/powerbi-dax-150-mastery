@@ -672,3 +672,124 @@ MROUND(SUM(FactDeliveryPayout[CalculatedIncentive]), 5)
 ### 🚨 Common Interview Traps:
 * **Trap 1: Negative Digits in `ROUND`:** Agar `ROUND(1250, -2)` likhenge toh result `1300` aayega (hundreds digit par round karega).
 * **Trap 2: `MROUND` Sign Mismatch Error:** Agar number negative ho aur multiple positive (jaise `MROUND(-48, 5)`), toh DAX runtime error fek deta hai. Dono ka sign same hona zaroori hai.
+
+
+---
+
+## 📌 Q027: Sub-Category Contribution within Parent Category (`ALLEXCEPT`)
+
+### 💡 Production DAX:
+```dax
+SubCategory % of Category Sales = 
+DIVIDE(
+    [Total Net Sales],
+    CALCULATE(
+        [Total Net Sales],
+        ALLEXCEPT(DimProduct, DimProduct[Category])
+    ),
+    0
+)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Matrix visual me har Sub-Category ka percentage pure store ke total se nahi, balki uski parent Category ke total se divide karke nikalna hai. Kaise karoge?"*
+* **Aapka 1–2 Yr Analyst Professional Jawab:**
+  > *"Sir, `ALL(DimProduct)` pure table ke filters hata kar Grand Total de deta hai. Hume sirf SubCategory ka filter hatana hai aur Category ka filter bacha kar rakhna hai. Iske liye Denominator me `CALCULATE([Total Net Sales], ALLEXCEPT(DimProduct, DimProduct[Category]))` lagayenge."*
+
+### 🚨 Common Interview Traps:
+* **Trap 1: Filters on Other Tables:** `ALLEXCEPT` sirf apni specified table (`DimProduct`) ke filters hatata hai. Agar slicer me `DimDate[Year] = 2024` ya `DimStore[Region] = 'North'` laga ho, toh wo filter intact rehta hai, jo ki financial reporting ke liye bilkul sahi behaviour hai.
+* **Trap 2: `ALLEXCEPT` vs `REMOVEFILTERS`:** Modern DAX me `REMOVEFILTERS(DimProduct[SubCategory])` bhi use ho sakta hai, par jab table me multiple sub-levels ho toh `ALLEXCEPT` zyada safe aur concise rehta hai.
+
+
+---
+
+## 📌 Q028: Visual Sliced Total vs Grand Total (`ALL` vs `ALLSELECTED`)
+
+### 💡 Production DAX:
+```dax
+% of Selected Total Sales = 
+DIVIDE(
+    [Total Net Sales],
+    CALCULATE(
+        [Total Net Sales],
+        ALLSELECTED()
+    ),
+    0
+)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Jab user dashboard par slicer lagata hai, toh visual ke andar percentages ka sum 100% kyu nahi banta agar hum `ALL()` use karein? Aur ise 100% sum karne ke liye kya use karte hain?"*
+* **Aapka 1–2 Yr Analyst Professional Jawab:**
+  > *"Sir, `ALL()` bahar ke slicers ko bhi uda deta hai jisse denominator pure dataset ka grand total ban jata hai. Visual ke andar 100% total lane ke liye hum `ALLSELECTED()` use karte hain, jo visual ke internal row grouping ko hatata hai lekin bahar ke slicers aur page filters ko preserve rakhta hai."*
+
+### 🚨 Common Interview Traps:
+* **Trap 1: Syntax of `ALLSELECTED`:** `ALLEXCEPT` table aur column dono mangta hai (`ALLEXCEPT(Table, Col)`). Lekin `ALLSELECTED` me ya toh blank chhodte hain `ALLSELECTED()`, ya sirf column dete hain `ALLSELECTED(DimProduct[Category])`, ya sirf table dete hain `ALLSELECTED(DimProduct)`. Table aur column dono ek sath pass karna syntax error deta hai.
+* **Trap 2: Visual Totals Always Sum to 100%:** Production reports me matrix ya chart ka share of total dikhane ke liye standard best practice `ALLSELECTED()` hi hoti hai.
+
+
+---
+
+## 📌 Q029: Top N Aggregation (`TOPN` with `CALCULATE`)
+
+### 💡 Production DAX:
+```dax
+Top 1 Product Sales = 
+CALCULATE(
+    [Total Net Sales],
+    TOPN(
+        1,
+        VALUES(DimProduct[ProductName]),
+        [Total Net Sales],
+        DESC
+    )
+)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Executive card visual me Top 1 best-selling product ka revenue kaise nikaloge? Aur worst-selling product nikalna ho toh kya change hoga?"*
+* **Aapka 1–2 Yr Analyst Professional Jawab:**
+  > *"Sir, `TOPN` ek table function hai jo top N rows return karta hai. Ise `CALCULATE` ke filter argument me pass karte hain. Best-seller (Top 1) ke liye order parameter me `DESC` lagta hai (Highest to Lowest), aur agar worst-seller (Bottom 1) nikalna ho toh order parameter ko `ASC` (Lowest to Highest) kar dete hain."*
+
+### 🚨 Common Interview Traps:
+* **Trap 1: `ASC` vs `DESC`:** `TOPN` me default ya highest value ke liye `DESC` lagta hai. `ASC` lagane se bottom performer return hoga.
+* **Trap 2: Ties in `TOPN`:** Agar do products ki sales barabar (tie) ho jaye, toh `TOPN(1, ...)` dono products return kar deta hai (2 rows). Strict single item ke liye secondary tie-breaker column diya jata hai.
+
+
+---
+
+## 📌 Q030: Top N Portfolio Concentration % (Pillar 1 Grand Finale)
+
+### 💡 Production DAX:
+```dax
+-- Measure 1: Top 3 Combined Sales
+Top 3 Products Sales = 
+CALCULATE(
+    [Total Net Sales],
+    TOPN(
+        3,
+        VALUES(DimProduct[ProductName]),
+        [Total Net Sales],
+        DESC
+    )
+)
+
+-- Measure 2: Concentration %
+Top 3 Products Sales % = 
+DIVIDE(
+    [Top 3 Products Sales],
+    CALCULATE([Total Net Sales], ALL(DimProduct)),
+    0
+)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Pareto 80/20 analysis ke liye Top 3 Best-Selling products ka combined revenue aur unka overall revenue percentage share kaise nikaloge?"*
+* **Aapka 1–2 Yr Analyst Professional Jawab:**
+  > *"Sir, pehle hum `CALCULATE` ke andar `TOPN(3, VALUES(DimProduct[ProductName]), [Total Net Sales], DESC)` laga kar Top 3 products ka sales amount nikalenge.*
+  > *Fir doosre measure me Measure Branching use karke `DIVIDE([Top 3 Products Sales], CALCULATE([Total Net Sales], ALL(DimProduct)), 0)` se overall portfolio concentration % calculate karenge."*
+
+### 🚨 Common Interview Traps:
+* **Trap 1: Comma and Syntax:** `CALCULATE` me measure ke baad comma lagana zaroori hota hai: `CALCULATE([Measure], TOPN(...))`.
+* **Trap 2: Ascending vs Descending:** Top performers ke liye hamesha `DESC` order aayega, `ASC` lagane se bottom 3 products nikal aayenge.
+* **Trap 3: Denominator Filter Clearing:** Denominator me `ALL(DimProduct)` lagana padta hai taaki pura catalog ka 100% baseline mil sake.
