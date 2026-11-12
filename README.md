@@ -3,7 +3,7 @@
 
 ![Power BI Challenge](https://img.shields.io/badge/Power_BI-Top_150_Interview_Challenge-yellow.svg)
 ![Target Role](https://img.shields.io/badge/Role-Data_Analyst_%7C_0--2_Years-blue.svg)
-![Status](https://img.shields.io/badge/Progress-30%2F150_(20.0%25)-brightgreen.svg)
+![Status](https://img.shields.io/badge/Progress-35%2F150_(23.3%25)-brightgreen.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 ![Power BI Desktop](https://img.shields.io/badge/Power_BI_Desktop-100%25_Free-success.svg)
 
@@ -19,16 +19,16 @@ A production-grade, highly focused interview preparation repository containing *
 
 ---
 
-## 🗂️ Curriculum & Progress Tracker (30 / 150)
+## 🗂️ Curriculum & Progress Tracker (35 / 150)
 
 | Pillar | Topic / Area | Target Questions | Completed | Status |
 |:---|:---|:---:|:---:|:---|
 | **Pillar 1** | **Core DAX Aggregations & Math** (Qs 001 – 030) | 30 | 30 | `[██████████] 100% ✅ Completed` |
-| **Pillar 2** | **Logical, Text & Conditional DAX** (Qs 031 – 060) | 30 | 0 | `[░░░░░░░░░░] 0%` |
+| **Pillar 2** | **Logical, Text & Conditional DAX** (Qs 031 – 060) | 30 | 5 | `[██░░░░░░░░] 17%` |
 | **Pillar 3** | **Filter Context King (`CALCULATE` & Modifiers)** (Qs 061 – 090) | 30 | 0 | `[░░░░░░░░░░] 0%` |
 | **Pillar 4** | **Time Intelligence Masterclass** (Qs 091 – 120) | 30 | 0 | `[░░░░░░░░░░] 0%` |
 | **Pillar 5** | **Data Modeling, Relationships & Service** (Qs 121 – 150) | 30 | 0 | `[░░░░░░░░░░] 0%` |
-| **TOTAL** | **5 Core Pillars** | **150** | **30** | **30 / 150 (20.0%)** |
+| **TOTAL** | **5 Core Pillars** | **150** | **35** | **35 / 150 (23.3%)** |
 
 ---
 
@@ -66,6 +66,11 @@ A production-grade, highly focused interview preparation repository containing *
 | **Q028** | Visual Sliced Contribution % | Dynamic Visual Total 100% via `ALLSELECTED` | Spotify, Netflix, Myntra | [Q028 Solution ↗](01_Pillar1_Core_DAX_Math/Q028_Visual_Total_ALLSELECTED.md) |
 | **Q029** | Top N Aggregation | Dynamic Best-Seller KPI via `TOPN` & `CALCULATE` | Amazon, Apple, Nike | [Q029 Solution ↗](01_Pillar1_Core_DAX_Math/Q029_TopN_Aggregation_CALCULATE.md) |
 | **Q030** | Top N Portfolio Concentration % | Pareto 80/20 Analysis & Measure Branching | McKinsey, BCG, Bain | [Q030 Solution ↗](01_Pillar1_Core_DAX_Math/Q030_TopN_Portfolio_Concentration.md) |
+| **Q031** | KPI Target Status Badge | Conditional Status Chips via `SWITCH(TRUE())` | Uber, Microsoft, Deloitte | [Q031 Solution ↗](02_Pillar2_Logical_Conditional/Q031_KPI_Status_Badge_SWITCH_TRUE.md) |
+| **Q032** | Dynamic Color Hex Formatting | Dynamic Background & Font Colors via Hex Codes | Airbnb, Spotify, Target | [Q032 Solution ↗](02_Pillar2_Logical_Conditional/Q032_Dynamic_Color_Formatting_Hex.md) |
+| **Q033** | Dynamic Arrow Indicators & Variance | KPI Unicode Arrows & Text Formatting via `FORMAT` | American Express, Barclays, VISA | [Q033 Solution ↗](02_Pillar2_Logical_Conditional/Q033_Unicode_Arrows_Trend_KPI.md) |
+| **Q034** | Dynamic Auto-Scaling Currency | Human-Readable K/M Currency Suffixes via `FORMAT` | Bloomberg, Goldman Sachs, Stripe | [Q034 Solution ↗](02_Pillar2_Logical_Conditional/Q034_Dynamic_Auto_Scaling_Currency.md) |
+| **Q035** | Multi-Criteria Customer Segmentation | Compound Boolean `&&` Logic via `SWITCH(TRUE())` | Amazon, Flipkart, Swiggy | [Q035 Solution ↗](02_Pillar2_Logical_Conditional/Q035_Multi_Criteria_Customer_Segmentation.md) |
 
 ---
 

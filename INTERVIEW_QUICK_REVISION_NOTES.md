@@ -793,3 +793,143 @@ DIVIDE(
 * **Trap 1: Comma and Syntax:** `CALCULATE` me measure ke baad comma lagana zaroori hota hai: `CALCULATE([Measure], TOPN(...))`.
 * **Trap 2: Ascending vs Descending:** Top performers ke liye hamesha `DESC` order aayega, `ASC` lagane se bottom 3 products nikal aayenge.
 * **Trap 3: Denominator Filter Clearing:** Denominator me `ALL(DimProduct)` lagana padta hai taaki pura catalog ka 100% baseline mil sake.
+
+
+---
+
+## 📌 Q031: KPI Target Status Badge (`SWITCH(TRUE())`)
+
+### 💡 Production DAX:
+```dax
+Margin Health Status = 
+SWITCH(
+    TRUE(),
+    ISBLANK([Profit Margin %]), "⚪ No Data",
+    [Profit Margin %] >= 0.20, "🟢 High Margin",
+    [Profit Margin %] >= 0.10, "🟡 Moderate Margin",
+    "🔴 Low Margin"
+)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Executive dashboard me raw profit % ke sath-sath colored visual status badges (🟢 / 🟡 / 🔴) kaise display karoge?"*
+* **Aapka 1–2 Yr Analyst Professional Jawab:**
+  > *"Sir, multiple condition badges ke liye hum `SWITCH(TRUE(), ...)` ladder pattern use karte hain.*
+  > *Sabse pehle `ISBLANK()` check lagate hain taaki blank ko 0 na maan liya jaye. Fir highest threshold (`>= 0.20`) se lowest threshold evaluate karte hain."*
+
+### 🚨 Common Interview Traps:
+* **Trap 1: 20 vs 0.20 (Percentage Trap):** Power BI me 20% visually dikhta hai lekin DAX engine me wo `0.20` hota hai. `>= 20` likhne se wo 2000% check karega aur condition fail ho jayegi.
+* **Trap 2: `ISBLANK` Function Call:** DAX me `ISBLANK(Measure)` function hota hai, SQL ya English jaisa `Measure ISBLANK` likhna syntax error deta hai.
+
+
+---
+
+## 📌 Q032: Dynamic Conditional Formatting via Hex Codes
+
+### 💡 Production DAX:
+```dax
+Margin Color Code = 
+SWITCH(
+    TRUE(),
+    ISBLANK([Profit Margin %]), "#BDC3C7", -- Neutral Gray
+    [Profit Margin %] >= 0.20, "#2ECC71", -- Green
+    [Profit Margin %] >= 0.10, "#F1C40F", -- Amber Yellow
+    "#E74C3C"                             -- Red (Handles < 10% and Negative Losses)
+)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Visuals me background ya font color ko dynamically control karne ke liye DAX measure kaise likhoge?"*
+* **Aapka 1–2 Yr Analyst Professional Jawab:**
+  > *"Sir, hum DAX me Hex Color Code string (`#RRGGBB`) return karne wala measure banate hain aur Power BI visual me Conditional Formatting me jaakar 'Format by Field Value' me is measure ko select kar lete hain.*
+  > *Red color ko last me default fallback rakhte hain taaki low margin ke sath-sath negative losses bhi red me highlight ho sakein."*
+
+### 🚨 Common Interview Traps:
+* **Trap: Negative Margins (Losses):** Agar last me `[Profit Margin %] >= 0, "#E74C3C"` likha, toh jo product loss me hoga (-5% margin), wo blank ho jayega aur color nahi aayega. Isliye last argument ko hamesha direct fallback `"#E74C3C"` chhodte hain.
+
+
+---
+
+## 📌 Q033: Dynamic Arrow Indicators & Variance KPI (`FORMAT` + Unicode)
+
+### 💡 Production DAX:
+```dax
+Variance Trend KPI = 
+VAR VarianceVal = [Sales Variance %]
+RETURN
+SWITCH(
+    TRUE(),
+    ISBLANK(VarianceVal), "-",
+    VarianceVal > 0.02,  "▲ +" & FORMAT(VarianceVal, "0.0%"),
+    VarianceVal < -0.02, "▼ "  & FORMAT(VarianceVal, "0.0%"),
+    "► "  & FORMAT(VarianceVal, "0.0%")
+)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Card visual me sales growth ke sath directional arrows (▲ / ▼ / ►) aur percentage text ek sath kaise display karoge?"*
+* **Aapka 1–2 Yr Analyst Professional Jawab:**
+  > *"Sir, hum `SWITCH(TRUE(), ...)` ke sath DAX ka `FORMAT([Sales Variance %], '0.0%')` function use karte hain aur Unicode arrows (`▲`, `▼`, `►`) ko `&` operator se concatenate kar dete hain.*
+  > *Variable (`VAR`) me measure ko cache kar lete hain taaki baar-baar recalculate na ho."*
+
+### 🚨 Common Interview Traps:
+* **Trap: `FORMAT()` Returns Text:** `FORMAT()` lagane ke baad measure ka data type **Text** ban jata hai! Ise chart ke numerical Y-axis par plot nahi kiya ja sakta, ye sirf Card visual, Matrix text labels, ya Tooltips ke liye hota hai.
+
+
+---
+
+## 📌 Q034: Dynamic Auto-Scaling Currency (`K` / `M` Formatting)
+
+### 💡 Production DAX:
+```dax
+Formatted Sales Scaled = 
+VAR SalesVal = [Total Net Sales]
+RETURN
+SWITCH(
+    TRUE(),
+    ISBLANK(SalesVal), "₹ 0",
+    SalesVal >= 1000000, "₹ " & FORMAT(SalesVal / 1000000, "0.0") & "M",
+    SalesVal >= 1000,    "₹ " & FORMAT(SalesVal / 1000, "0.0") & "K",
+    "₹ " & FORMAT(SalesVal, "#,##0")
+)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Card visuals me sales amount automatically K (Thousands) ya M (Millions) me dynamically kaise scale hoti hai?"*
+* **Aapka 1–2 Yr Analyst Professional Jawab:**
+  > *"Sir, hum `SWITCH(TRUE(), ...)` ke sath numbers ko 1,000,000 ya 1,000 se divide karke `FORMAT(..., '0.0') & 'M'` suffix jod dete hain.*
+  > *Sabse important ye hai ki `VAR SalesVal = [Total Net Sales]` use karein taaki ek hi card visual me measure 6-7 baar evaluate hone ke bajaye sirf 1 baar evaluate ho aur query 7x fast ho jaye."*
+
+### 🚨 Common Interview Traps:
+* **Trap 1: Performance without `VAR`:** Agar `VAR` use nahi kiya, toh DAX har condition aur division me `[Total Net Sales]` measure ko bar-bar calculate karega jisse CPU query load bohot badh jayega.
+* **Trap 2: Modern Dynamic Format Strings:** Agar interviewer puche: *"Kya hum measure ko text banaye bina bhi ye kar sakte hain?"* Toh jawab hai: *"Haan sir, Power BI ke native 'Dynamic Format String' feature se `SELECTEDMEASURE()` use karke ise numeric rakha ja sakta hai."*
+
+
+---
+
+## 📌 Q035: Multi-Criteria Customer Segmentation (`SWITCH(TRUE())` with `&&`)
+
+### 💡 Production DAX:
+```dax
+Customer Tier Segment = 
+VAR __SalesVal  = [Total Net Sales]
+VAR __OrdersVal = [Total Orders]
+RETURN
+SWITCH(
+    TRUE(),
+    ISBLANK(__OrdersVal), "⚪ Prospect",
+    __SalesVal >= 50000 && __OrdersVal >= 10, "💎 Platinum VIP",
+    __SalesVal >= 20000 && __OrdersVal >= 5,  "🥇 Gold Member",
+    __OrdersVal == 1, "🌱 One-Time Buyer",
+    "🥉 Regular Customer"
+)
+```
+
+### 🏢 Business Scenario:
+* **Interviewer:** *"Customer ko Spend aur Order Frequency dono ke basis par segment karke tier badge (Platinum, Gold, One-Time) kaise doge?"*
+* **Aapka 1–2 Yr Analyst Professional Jawab:**
+  > *"Sir, hum multiple measures ko `VAR __SalesVal` aur `VAR __OrdersVal` me cache karte hain aur `SWITCH(TRUE(), ...)` ke andar compound Boolean operator `&&` (AND) se dono conditions check karte hain.*
+  > *Sabse pehle `ISBLANK` check karte hain, fir highest tier se lowest tier tak order evaluate karte hain."*
+
+### 🚨 Common Interview Traps:
+* **Trap: Measure vs Calculated Column for Slicers:** Ye measure table visual aur cards me kaam karega. Lekin agar interviewer puche ki *"Kya ise Slicer me daal kar page filter kar sakte hain?"*, toh jawab hai: *"Nahi sir, Slicer ke liye ise `DimCustomer` me Calculated Column banana padega."*
